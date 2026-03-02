@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@reference flex, flex-col, gap-4, p-10, bg-gray-900, border, border-gray-800, rounded-2xl, shadow-xl, w-full, max-w-md;
+@reference w-full, p-4, bg-gray-800, text-white, border, border-gray-700, rounded-xl, outline-none, focus:ring-2, focus:ring-purple-500, transition-all;
+@reference w-full, py-4, bg-purple-600, hover:bg-purple-500, disabled:bg-gray-700, text-white, font-black, rounded-xl, uppercase, tracking-widest, transition-all;
+@reference text-xs, font-bold, text-gray-400, uppercase, tracking-tighter;
+
+.auth-form {
+  @apply flex flex-col gap-4 p-10 bg-gray-900 border border-gray-800 rounded-2xl shadow-xl w-full max-w-md;
+}
+
+.auth-input {
+  @apply w-full p-4 bg-gray-800 text-white border border-gray-700 rounded-xl outline-none focus:ring-2 focus:ring-purple-500 transition-all;
+}
+
+.auth-button {
+  @apply w-full py-4 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-700 text-white font-black rounded-xl uppercase tracking-widest transition-all;
+}
+
+.auth-label {
+  @apply text-xs font-bold text-gray-400 uppercase tracking-tighter;
+}

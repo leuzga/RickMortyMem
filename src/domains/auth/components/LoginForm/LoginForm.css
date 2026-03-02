@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@reference flex, flex-col, gap-4, w-full, max-w-sm, bg-slate-800/50, backdrop-blur-sm, p-6, rounded-xl, border, border-slate-700/50, shadow-2xl;
+@reference text-xs, font-medium, text-slate-400, uppercase, tracking-wider;
+@reference px-3, py-2, bg-slate-700/50, border, border-slate-600/50, rounded-lg, text-white, placeholder-slate-500, focus:outline-none, focus:ring-2, focus:ring-cyan-500/50, focus:border-cyan-500/50, transition-all;
+@reference py-2, px-4, bg-gradient-to-r, from-cyan-500, to-blue-500, text-white, font-bold, rounded-lg, hover:from-cyan-600, hover:to-blue-600, focus:outline-none, focus:ring-2, focus:ring-cyan-500/50, disabled:opacity-50, disabled:cursor-not-allowed, transition-all;
+
+.auth-form {
+  @apply flex flex-col gap-4 w-full max-w-sm bg-slate-800/50 backdrop-blur-sm p-6 rounded-xl border border-slate-700/50 shadow-2xl;
+}
+
+.auth-label {
+  @apply text-xs font-medium text-slate-400 uppercase tracking-wider;
+}
+
+.auth-input {
+  @apply w-full px-3 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all;
+}
+
+.auth-button {
+  @apply w-full py-2 px-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg hover:from-cyan-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all;
+}
