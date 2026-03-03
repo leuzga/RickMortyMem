@@ -27,10 +27,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   clearError: () => set((prev) => ({ ...prev, error: null })),
 
-  setGameStatus: (status: GameStatus) => set((prev) => ({ ...prev, gameStatus: status })),
-
-  setCards: (cards: Card[]) => set((prev) => ({ ...prev, cards })),
-
   /**
    * Inicia el juego: API call → crea cartas → preview 3s → playing.
    */

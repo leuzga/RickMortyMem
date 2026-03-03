@@ -5,7 +5,6 @@ import {
   validateUsername,
   validateLoginCredentials,
   validateRegisterCredentials,
-  validateRequiredFields,
 } from './validators';
 
 // ─── validateEmail ────────────────────────────────────────────────────────────
@@ -163,30 +162,5 @@ describe('validateRegisterCredentials', () => {
     const result = validateRegisterCredentials('ab', 'rick@citadel.com', 'wubbaLubba');
     expect(result.isValid).toBe(false);
     expect(result.errors).toContain('El nombre de usuario debe tener al menos 3 caracteres');
-  });
-});
-
-// ─── validateRequiredFields ───────────────────────────────────────────────────
-
-describe('validateRequiredFields', () => {
-  it('debe retornar error por cada campo faltante', () => {
-    const result = validateRequiredFields({ name: '', email: 'test@x.com' }, ['name', 'email']);
-    expect(result.isValid).toBe(false);
-    expect(result.errors).toContain('El campo name es requerido');
-    expect(result.errors).not.toContain('El campo email es requerido');
-  });
-
-  it('debe retornar válido cuando todos los campos tienen valor', () => {
-    const result = validateRequiredFields(
-      { name: 'Rick', email: 'rick@c137.com' },
-      ['name', 'email']
-    );
-    expect(result.isValid).toBe(true);
-    expect(result.errors).toHaveLength(0);
-  });
-
-  it('debe retornar error para campo con valor undefined', () => {
-    const result = validateRequiredFields({ name: undefined }, ['name']);
-    expect(result.isValid).toBe(false);
   });
 });

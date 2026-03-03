@@ -43,8 +43,6 @@ export interface GameActions {
   flipCard: (card: Card) => void;
   resetGame: () => void;
   clearError: () => void;
-  setGameStatus: (status: GameStatus) => void;
-  setCards: (cards: Card[]) => void;
   evaluateMatch: () => void;
 }
 
