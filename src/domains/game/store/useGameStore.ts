@@ -16,6 +16,8 @@ const initialState = {
   gameStatus: 'idle' as GameStatus,
   isLoading: false,
   error: null as string | null,
+  previewTimeoutId: null as ReturnType<typeof setTimeout> | null,
+  evaluateTimeoutId: null as ReturnType<typeof setTimeout> | null,
 };
 
 // ─── Store ────────────────────────────────────────────────────────────────────
@@ -33,6 +35,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
    * Inicia el juego: API call → crea cartas → preview 3s → playing.
    */
   initGame: async () => {
+    const { previewTimeoutId, evaluateTimeoutId } = get();
+    if (previewTimeoutId) clearTimeout(previewTimeoutId);
+    if (evaluateTimeoutId) clearTimeout(evaluateTimeoutId);
+
     set((prev) => ({ ...prev, ...initialState, isLoading: true, gameStatus: 'initializing' }));
 
     const ids = generateCharacterIds();
@@ -61,13 +67,15 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }));
 
     // After preview, flip all down and enable play
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       const faceDown: Card[] = get().cards.map((c) => ({
         ...c,
         isFlipped: false,
       }));
-      set((prev) => ({ ...prev, cards: faceDown, gameStatus: 'playing' }));
+      set((prev) => ({ ...prev, cards: faceDown, gameStatus: 'playing', previewTimeoutId: null }));
     }, GAME_CONFIG.PREVIEW_DELAY_MS);
+
+    set((prev) => ({ ...prev, previewTimeoutId: timeoutId }));
   },
 
   /**
@@ -104,9 +112,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
       turns: prev.turns + 1,
     }));
 
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       get().evaluateMatch();
     }, GAME_CONFIG.FLIP_BACK_DELAY_MS);
+
+    set((prev) => ({ ...prev, evaluateTimeoutId: timeoutId }));
   },
 
   /**
@@ -139,6 +149,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       isEvaluating: false,
       matches: newMatches,
       gameStatus: isFinished ? 'finished' : 'playing',
+      evaluateTimeoutId: null,
     }));
   },
 

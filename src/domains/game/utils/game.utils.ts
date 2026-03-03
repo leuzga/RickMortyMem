@@ -6,8 +6,12 @@ import { RICK_MORTY_API, GAME_CONFIG } from '../constants/game.constants';
 /**
  * Generates N unique random integers in range [1, max].
  * Pure function — same range always produces valid random results.
+ * @throws Error if count > max (impossible to generate unique IDs)
  */
 export const generateRandomIds = (count: number, max: number): number[] => {
+  if (count > max) {
+    throw new Error(`Cannot generate ${count} unique IDs from range [1, ${max}]`);
+  }
   const ids = new Set<number>();
   while (ids.size < count) {
     ids.add(Math.floor(Math.random() * max) + 1);

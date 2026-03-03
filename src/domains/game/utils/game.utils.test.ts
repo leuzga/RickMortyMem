@@ -52,6 +52,18 @@ describe('generateRandomIds', () => {
       expect(id).toBeLessThanOrEqual(50);
     });
   });
+
+  it('throws error when count > max (prevents infinite loop)', () => {
+    expect(() => generateRandomIds(100, 50)).toThrow(
+      'Cannot generate 100 unique IDs from range [1, 50]'
+    );
+  });
+
+  it('throws error when count equals max + 1', () => {
+    expect(() => generateRandomIds(11, 10)).toThrow(
+      'Cannot generate 11 unique IDs from range [1, 10]'
+    );
+  });
 });
 
 // ─── generateCharacterIds ─────────────────────────────────────────────────────

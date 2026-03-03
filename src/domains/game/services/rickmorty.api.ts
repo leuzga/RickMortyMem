@@ -3,6 +3,15 @@ import { RICK_MORTY_API, GAME_CONFIG, GAME_MESSAGES } from '../constants/game.co
 
 // ─── Validators ───────────────────────────────────────────────────────────────
 
+const isValidImageUrl = (url: string): boolean => {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+};
+
 const isValidCharacter = (data: unknown): data is RickMortyCharacter => {
   if (!data || typeof data !== 'object') return false;
   const char = data as Record<string, unknown>;
@@ -11,7 +20,8 @@ const isValidCharacter = (data: unknown): data is RickMortyCharacter => {
     typeof char.name === 'string' &&
     typeof char.image === 'string' &&
     char.name.length > 0 &&
-    char.image.length > 0
+    char.image.length > 0 &&
+    isValidImageUrl(char.image)
   );
 };
 
@@ -30,11 +40,18 @@ const validateCharacters = (data: unknown): RickMortyCharacter[] => {
 
 // ─── Fetch with retry ─────────────────────────────────────────────────────────
 
+const TIMEOUT_MS = 10000; // 10 segundos
+
 const fetchWithRetry = async (url: string, attempts: number): Promise<Response> => {
   let lastError: Error = new Error(GAME_MESSAGES.API.ERROR);
   for (let i = 0; i < attempts; i++) {
     try {
-      const res = await fetch(url);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+      const res = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
       if (res.status === 429) throw new Error(GAME_MESSAGES.API.TOO_MANY_REQUESTS);
       if (!res.ok) throw new Error(`${GAME_MESSAGES.API.ERROR}: HTTP ${res.status}`);
       return res;

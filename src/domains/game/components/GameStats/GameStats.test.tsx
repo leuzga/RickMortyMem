@@ -13,12 +13,12 @@ describe('GameStats', () => {
   it('renders correct labels', () => {
     render(<GameStats turns={0} matches={0} totalPairs={8} />);
     expect(screen.getByText('Turnos')).toBeInTheDocument();
-    expect(screen.getByText('Pares')).toBeInTheDocument();
+    expect(screen.getByText('Pares/8')).toBeInTheDocument();
   });
 
-  it('shows totalPairs denominator', () => {
-    render(<GameStats turns={0} matches={4} totalPairs={8} />);
-    expect(screen.getByText('/ 8')).toBeInTheDocument();
+  it('shows totalPairs denominator combined with label', () => {
+    render(<GameStats turns={0} matches={4} totalPairs={9} />);
+    expect(screen.getByText('Pares/9')).toBeInTheDocument();
   });
 
   it('updates when props change', () => {

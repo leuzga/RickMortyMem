@@ -34,6 +34,8 @@ export interface GameState {
   readonly gameStatus: GameStatus;
   readonly isLoading: boolean;
   readonly error: string | null;
+  readonly previewTimeoutId: ReturnType<typeof setTimeout> | null;
+  readonly evaluateTimeoutId: ReturnType<typeof setTimeout> | null;
 }
 
 export interface GameActions {
