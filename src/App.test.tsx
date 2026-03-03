@@ -41,20 +41,22 @@ describe('App Component', () => {
     expect(loginButton).toBeDefined();
   });
 
-  it('debe mostrar pantalla de bienvenida cuando está autenticado', () => {
+  it('debe mostrar el GameBoard cuando está autenticado', () => {
     mockUseAuthStore.mockReturnValue({
       isAuthenticated: true,
       user: { id: '1', username: 'Rick', email: 'rick@citadel.com' },
       login: vi.fn(),
       register: vi.fn(),
       logout: vi.fn(),
+      loginWithOAuthCallback: vi.fn().mockResolvedValue(undefined),
       isLoading: false,
       error: null,
       clearError: vi.fn(),
     } as any);
 
     render(<App />);
-    const welcomeMessage = screen.getByText(/¡BIENVENIDO, RICK!/i);
-    expect(welcomeMessage).toBeDefined();
+    // GameBoard renders with its status region
+    const statusRegion = screen.getByRole('status');
+    expect(statusRegion).toBeDefined();
   });
 });

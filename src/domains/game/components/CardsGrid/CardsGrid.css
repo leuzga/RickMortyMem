@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+/* ─── CardsGrid — mobile first ───────────────────────────────────────────────*/
+
+.cards-grid {
+  @apply grid gap-2 w-full;
+  /* 6 columns × 3 rows - todas las cards visibles */
+  grid-template-columns: repeat(6, 1fr);
+}
+
+/* Tablet+ */
+@media (min-width: 640px) {
+  .cards-grid {
+    @apply gap-3;
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .cards-grid {
+    @apply gap-4;
+    grid-template-columns: repeat(6, 1fr);
+  }
+}

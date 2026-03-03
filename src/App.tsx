@@ -6,13 +6,13 @@ import { RegisterForm } from './domains/auth/components/RegisterForm/RegisterFor
 import { ForgotPasswordForm } from './domains/auth/components/ForgotPasswordForm/ForgotPasswordForm';
 import { ToastContainer } from './shared/components/Toast/ToastContainer';
 import { Header } from './shared/components/Header/Header';
+import { GameBoard } from './domains/game/components/GameBoard/GameBoard';
 import { getLayoutTitle, isOAuthCallback } from './domains/auth/utils/auth.utils';
 import type { ActiveForm } from './domains/auth/utils/auth.utils';
-import { MESSAGES } from './shared/constants/messages';
 import './App.css';
 
 const App: React.FC = () => {
-  const { isAuthenticated, user, loginWithOAuthCallback } = useAuthStore();
+  const { isAuthenticated, loginWithOAuthCallback } = useAuthStore();
   const [activeForm, setActiveForm] = React.useState<ActiveForm>('login');
 
   React.useEffect(() => {
@@ -20,13 +20,10 @@ const App: React.FC = () => {
   }, [loginWithOAuthCallback]);
 
   return (
-    <main className="app-container">
+    <main className={`app-container ${isAuthenticated ? 'app-container--game' : ''}`}>
       <Header />
       {isAuthenticated ? (
-        <div className="welcome-screen">
-          <h1 className="text-4xl font-black">{MESSAGES.APP.WELCOME_HEADING} {user?.username}!</h1>
-          <p className="text-cyan-500">{MESSAGES.APP.WELCOME_SUBTITLE}</p>
-        </div>
+        <GameBoard />
       ) : (
         <AuthLayout title={getLayoutTitle(activeForm)}>
           {activeForm === 'register' && (

@@ -1,11 +1,7 @@
-import { useState, useCallback, useRef, ChangeEvent, FormEvent } from 'react';
+import { useState, useCallback, ChangeEvent, FormEvent } from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { RegisterCredentials } from '../../types/auth.types';
 import { validateRegisterCredentials } from '../../../../shared/utils/validators';
-
-interface UseRegisterFormProps {
-  onSuccess: () => void;
-}
 
 interface UseRegisterFormReturn {
   form: RegisterCredentials;
@@ -14,9 +10,10 @@ interface UseRegisterFormReturn {
   validationErrors: string[];
   handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: FormEvent) => Promise<void>;
+  registrationSuccess: boolean;
 }
 
-export const useRegisterForm = ({ onSuccess }: UseRegisterFormProps): UseRegisterFormReturn => {
+export const useRegisterForm = (): UseRegisterFormReturn => {
   const { register, isLoading, error, clearError } = useAuthStore();
   const [form, setForm] = useState<RegisterCredentials>({
     username: '',
@@ -25,29 +22,49 @@ export const useRegisterForm = ({ onSuccess }: UseRegisterFormProps): UseRegiste
   });
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
-  // Always-current ref so callbacks never go stale
-  const formRef = useRef(form);
-  formRef.current = form;
-
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
     clearError();
-    setValidationErrors((prev) => (prev.length > 0 ? [] : prev));
-  }, [clearError]);
+    // Limpiar errores de validación al cambiar el valor
+    if (validationErrors.length > 0) {
+      setValidationErrors([]);
+    }
+  }, [clearError, validationErrors.length]);
+
+  const validateForm = useCallback((): boolean => {
+    console.log('🔍 Validando formulario:', { username: form.username, email: form.email, password: form.password });
+
+    const validation = validateRegisterCredentials(form.username, form.email, form.password);
+    console.log('🔍 Resultado validación:', validation);
+
+    if (!validation.isValid) {
+      console.log('❌ Errores encontrados:', validation.errors);
+      setValidationErrors(validation.errors);
+      return false;
+    }
+
+    console.log('✅ Formulario válido');
+    setValidationErrors([]);
+    return true;
+  }, [form]);
 
   const handleSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault();
+    console.log('🚀 Submit iniciado');
 
-    const current = formRef.current;
-    const validation = validateRegisterCredentials(current.username, current.email, current.password);
-    if (!validation.isValid) {
-      setValidationErrors(validation.errors);
+    // Validar formulario antes de enviar
+    const isValid = validateForm();
+    console.log('🔍 Resultado validación en submit:', isValid);
+
+    if (!isValid) {
+      console.log('❌ Submit bloqueado por validación');
       return;
     }
-    setValidationErrors([]);
-    await register(current, onSuccess);
-  }, [register, onSuccess]);
+
+    console.log('✅ Submit continuando a register');
+    await register(form);
+  }, [form, register, validateForm]);
 
   return {
     form,

@@ -15,6 +15,12 @@ export const MESSAGES = {
     NO_MATCH: 'No coincide, intenta de nuevo',
     SCORE_UPDATE: 'Puntuación actualizada',
     TIME_WARNING: '¡Te quedan 10 segundos!',
+    // API errors (domain game)
+    API_ERROR: 'No se pudo conectar con el API de Rick and Morty',
+    API_RETRY: 'Reintentando conexión con el API...',
+    API_UNAVAILABLE: 'El API de Rick and Morty no está disponible. Intenta más tarde.',
+    API_RATE_LIMIT: 'Demasiadas peticiones. Espera un momento e intenta de nuevo.',
+    LOADING_CHARACTERS: 'Cargando personajes...',
   },
 
   // Errores generales

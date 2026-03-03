@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+/* ─── Card component — mobile first ────────────────────────────────────────── */
+
+.card {
+  @apply relative cursor-pointer select-none;
+  perspective: 800px;
+  aspect-ratio: 2 / 3;
+  width: 100%;
+}
+
+.card:focus-visible {
+  @apply outline-2 outline-offset-2 outline-purple-400 rounded-xl;
+}
+
+.card--matched {
+  @apply cursor-default;
+}
+
+/* ─── 3D flip container ───────────────────────────────────────────────────────*/
+
+.card__inner {
+  @apply relative w-full h-full rounded-xl;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card--flipped .card__inner {
+  transform: rotateY(180deg);
+}
+
+/* ─── Shared face styles ─────────────────────────────────────────────────────*/
+
+.card__face {
+  @apply absolute inset-0 w-full h-full rounded-xl overflow-hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* ─── Back face ──────────────────────────────────────────────────────────────*/
+
+.card__face--back {
+  @apply flex items-center justify-center;
+  background: linear-gradient(
+    135deg,
+    hsl(280, 70%, 25%) 0%,
+    hsl(265, 60%, 18%) 50%,
+    hsl(250, 50%, 12%) 100%
+  );
+  border: 1.5px solid hsl(280, 60%, 40%);
+  box-shadow:
+    0 0 0 1px hsl(280, 80%, 55%, 0.2),
+    inset 0 1px 0 hsl(280, 80%, 70%, 0.15);
+}
+
+.card__face--back::before {
+  content: '';
+  @apply absolute inset-0;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      hsl(280, 60%, 35%, 0.15) 10px,
+      hsl(280, 60%, 35%, 0.15) 11px
+    );
+}
+
+.card__back-pattern {
+  @apply relative z-10 flex items-center justify-center;
+}
+
+.card__back-icon {
+  @apply text-2xl;
+  filter: drop-shadow(0 0 8px hsl(280, 80%, 70%));
+}
+
+/* ─── Front face ─────────────────────────────────────────────────────────────*/
+
+.card__face--front {
+  @apply flex flex-col;
+  transform: rotateY(180deg);
+  background: hsl(265, 60%, 12%);
+  border: 1.5px solid hsl(280, 60%, 45%);
+}
+
+.card__image {
+  @apply w-full object-cover flex-1 min-h-0;
+}
+
+.card__name {
+  @apply text-center text-white font-semibold px-1 py-1.5 text-xs truncate;
+  background: linear-gradient(
+    to top,
+    hsl(265, 80%, 10%) 0%,
+    hsl(265, 70%, 15%) 100%
+  );
+  text-shadow: 0 1px 3px hsl(0, 0%, 0%, 0.8);
+}
+
+/* ─── Matched state ──────────────────────────────────────────────────────────*/
+
+.card--matched .card__face--front {
+  border-color: hsl(142, 70%, 50%);
+  box-shadow:
+    0 0 12px hsl(142, 80%, 50%, 0.4),
+    0 0 24px hsl(142, 80%, 45%, 0.2);
+}
+
+/* ─── Hover (non-matched, non-flipped) ───────────────────────────────────────*/
+
+.card:not(.card--flipped):not(.card--matched):hover .card__face--back {
+  border-color: hsl(280, 80%, 60%);
+  box-shadow: 0 0 16px hsl(280, 80%, 60%, 0.5);
+  transform: translateY(-2px) scale(1.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ─── Responsive: tablet (2 cols → 4 cols handled by CardsGrid) ──────────────*/
+@media (min-width: 640px) {
+  .card__name {
+    @apply text-sm py-2;
+  }
+
+  .card__back-icon {
+    @apply text-3xl;
+  }
+}

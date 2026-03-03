@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+/* ─── GameStats — mobile first ───────────────────────────────────────────────*/
+
+.game-stats {
+  @apply flex items-center justify-center gap-4;
+  background: hsl(265, 50%, 15%, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid hsl(280, 50%, 40%, 0.4);
+  @apply rounded-2xl px-5 py-2;
+}
+
+.game-stats__item {
+  @apply flex flex-col items-center gap-0.5;
+  white-space: nowrap;
+  min-width: 85px;
+}
+
+.game-stats__value {
+  @apply text-2xl font-black text-white;
+  text-shadow: 0 0 12px hsl(280, 90%, 70%);
+}
+
+.game-stats__label {
+  @apply text-xs font-medium uppercase tracking-wider;
+  color: hsl(280, 60%, 70%);
+}
+
+.game-stats__total {
+  @apply text-xs;
+  color: hsl(280, 40%, 55%);
+}
+
+.game-stats__divider {
+  @apply w-px h-10 rounded;
+  background: hsl(280, 50%, 40%, 0.5);
+}
+
+/* Tablet+ */
+@media (min-width: 640px) {
+  .game-stats__value {
+    @apply text-3xl;
+  }
+
+  .game-stats {
+    @apply px-8 py-3 gap-6;
+  }
+}
