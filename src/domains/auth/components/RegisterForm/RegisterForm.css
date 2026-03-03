@@ -1,22 +1,55 @@
 @import "tailwindcss";
 
-@reference flex, flex-col, gap-4, p-10, bg-gray-900, border, border-gray-800, rounded-2xl, shadow-xl, w-full, max-w-md;
-@reference w-full, p-4, bg-gray-800, text-white, border, border-gray-700, rounded-xl, outline-none, focus:ring-2, focus:ring-purple-500, transition-all;
-@reference w-full, py-4, bg-purple-600, hover:bg-purple-500, disabled:bg-gray-700, text-white, font-black, rounded-xl, uppercase, tracking-widest, transition-all;
-@reference text-xs, font-bold, text-gray-400, uppercase, tracking-tighter;
+@reference flex, flex-col, space-y-4, w-full;
+@reference block, text-sm, font-medium, text-gray-700, mb-1;
+@reference w-full, px-3, py-2, border, border-gray-300, rounded-md, placeholder-gray-400, focus:outline-none, focus:ring-2, focus:ring-purple-500, focus:border-transparent;
+@reference text-red-500, text-xs, mt-2;
+@reference flex, space-x-3, mt-6;
+@reference flex-1, py-2, px-4, border, border-transparent, rounded-md, shadow-sm, text-sm, font-medium, focus:outline-none, focus:ring-2, focus:ring-offset-2;
+@reference bg-purple-600, text-white, hover:bg-purple-700, focus:ring-purple-500;
+@reference bg-transparent, text-purple-600, border-purple-600, hover:bg-purple-50, focus:ring-purple-500;
+@reference disabled:opacity-50, disabled:cursor-not-allowed;
 
-.auth-form {
-  @apply flex flex-col gap-4 p-10 bg-gray-900 border border-gray-800 rounded-2xl shadow-xl w-full max-w-md;
+.register-form {
+  @apply flex flex-col space-y-4 w-full;
 }
 
-.auth-input {
-  @apply w-full p-4 bg-gray-800 text-white border border-gray-700 rounded-xl outline-none focus:ring-2 focus:ring-purple-500 transition-all;
+.register-form__field {
+  @apply flex flex-col;
 }
 
-.auth-button {
-  @apply w-full py-4 bg-purple-600 hover:bg-purple-500 disabled:bg-gray-700 text-white font-black rounded-xl uppercase tracking-widest transition-all;
+.register-form__label {
+  @apply block text-sm font-medium text-gray-700 mb-1;
 }
 
-.auth-label {
-  @apply text-xs font-bold text-gray-400 uppercase tracking-tighter;
+.register-form__input {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900;
+}
+
+.register-form__input:focus {
+  border-left: 4px solid rgb(147, 51, 234);
+}
+
+.register-form__validation-errors {
+  @apply space-y-1;
+}
+
+.register-form__error {
+  @apply text-red-500 text-xs mt-2;
+}
+
+.register-form__actions {
+  @apply flex space-x-3 mt-6;
+}
+
+.register-form__button {
+  @apply flex-1 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.register-form__button--primary {
+  @apply bg-purple-600 text-white hover:bg-purple-700 focus:ring-purple-500;
+}
+
+.register-form__button--secondary {
+  @apply bg-transparent text-purple-600 border-purple-600 hover:bg-purple-50 focus:ring-purple-500;
 }

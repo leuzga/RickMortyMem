@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+/* ─── Header bar ─────────────────────────────────────────────────────────── */
+
+.header {
+  @apply fixed top-0 left-0 right-0 z-50;
+  @apply flex items-center justify-end px-6 py-3;
+  background: rgba(15, 4, 30, 0.65);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(147, 51, 234, 0.25);
+}
+
+/* ─── Avatar trigger ─────────────────────────────────────────────────────── */
+
+.header__avatar-wrapper {
+  @apply relative flex items-center gap-3 cursor-pointer select-none;
+  padding: 6px 8px;
+  border-radius: 40px;
+  transition: background 0.2s ease;
+}
+
+.header__avatar-wrapper:hover {
+  background: rgba(147, 51, 234, 0.2);
+}
+
+.header__avatar {
+  @apply rounded-full object-cover;
+  width: 38px;
+  height: 38px;
+  border: 2px solid rgba(167, 85, 247, 0.7);
+  box-shadow: 0 0 0 0 rgba(147, 51, 234, 0);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.header__avatar-wrapper:hover .header__avatar {
+  border-color: rgba(167, 85, 247, 1);
+  box-shadow: 0 0 12px rgba(147, 51, 234, 0.55);
+}
+
+.header__avatar--guest {
+  @apply flex items-center justify-center rounded-full;
+  width: 38px;
+  height: 38px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.header__avatar-wrapper:hover .header__avatar--guest {
+  border-color: white;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.header__username {
+  @apply text-sm font-medium text-white;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── Dropdown menu ──────────────────────────────────────────────────────── */
+
+.header__menu {
+  @apply absolute right-0;
+  top: calc(100% + 4px);
+  min-width: 160px;
+  padding: 6px;
+  background: rgba(20, 6, 40, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(147, 51, 234, 0.35);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(147, 51, 234, 0.1);
+  animation: menuIn 0.15s ease;
+}
+
+@keyframes menuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.header__menu-item {
+  @apply flex items-center gap-3 w-full text-left text-sm;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.header__menu-item:hover {
+  background: rgba(147, 51, 234, 0.25);
+  color: white;
+}
+
+.header__menu-item--danger:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+.header__menu-divider {
+  height: 1px;
+  background: rgba(147, 51, 234, 0.2);
+  margin: 4px 0;
+}

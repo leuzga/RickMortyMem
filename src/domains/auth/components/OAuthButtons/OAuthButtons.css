@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+/* ─── Container ──────────────────────────────────────────────────────────── */
+
+.oauth-buttons {
+  @apply flex flex-col gap-3 w-full;
+}
+
+/* ─── Separator ──────────────────────────────────────────────────────────── */
+
+.oauth-buttons__separator {
+  @apply flex items-center gap-3;
+}
+
+.oauth-buttons__separator-line {
+  @apply flex-1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.oauth-buttons__separator-text {
+  @apply text-xs text-gray-400 uppercase tracking-wider whitespace-nowrap;
+}
+
+/* ─── Button list ────────────────────────────────────────────────────────── */
+
+.oauth-buttons__list {
+  @apply flex flex-col gap-2;
+}
+
+.oauth-buttons__btn {
+  @apply flex items-center gap-3 w-full px-4 py-3 rounded-xl border text-sm font-medium transition-all;
+  cursor: pointer;
+}
+
+.oauth-buttons__btn:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+/* Google */
+.oauth-buttons__btn--google {
+  background: #fff;
+  border-color: #e5e7eb;
+  color: #374151;
+}
+
+.oauth-buttons__btn--google:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* GitHub */
+.oauth-buttons__btn--github {
+  background: #24292e;
+  border-color: #24292e;
+  color: #fff;
+}
+
+.oauth-buttons__btn--github:hover:not(:disabled) {
+  background: #1a1e22;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ─── Icon & label ───────────────────────────────────────────────────────── */
+
+.oauth-buttons__icon {
+  @apply text-base font-bold;
+  width: 20px;
+  text-align: center;
+}
+
+.oauth-buttons__label {
+  @apply flex-1 text-left;
+}

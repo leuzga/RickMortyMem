@@ -1,11 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --color-brand: #3b82f6;
-  --color-accent: #10b981;
-  --bg-main: #f3f4f6;
+  --color-brand: #9333ea;
+  --color-accent: #a855f7;
+  --bg-main: #1e003d;
 }
 
 body {
-  @apply bg-slate-950 text-white min-h-screen antialiased;
+  @apply text-white min-h-screen antialiased;
+  background: radial-gradient(
+    ellipse at 60% 0%,
+    hsl(280, 80%, 18%) 0%,
+    hsl(265, 70%, 10%) 45%,
+    hsl(250, 60%, 5%) 100%
+  );
 }

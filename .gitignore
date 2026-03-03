@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Variables de entorno — NUNCA subir credenciales reales
+.env.local
+.env.*.local
+.env.test
+.env.production
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +28,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Test coverage output
+coverage/
+
+# AI assistant directories
+.gemini/

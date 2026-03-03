@@ -5,24 +5,12 @@
 @reference text-center, animate-in, fade-in, zoom-in, duration-500;
 @reference text-slate-500, hover:text-cyan-400, text-sm, font-medium, transition-colors, underline, underline-offset-4;
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
 .app-container {
-  @apply flex items-center justify-center min-h-screen p-4;
-  background: radial-gradient(ellipse at center, rgb(15 23 42 / 1), rgb(2 6 23 / 1), rgb(0 0 0 / 1));
-}
-
-.auth-wrapper {
-  @apply flex flex-col items-center gap-6 w-full;
+  @apply flex items-center justify-center min-h-screen w-full h-screen overflow-hidden;
 }
 
 .welcome-screen {
-  @apply text-center;
+  @apply text-center flex flex-col items-center gap-4;
   animation: fadeIn 0.5s ease-in-out;
 }
 
@@ -36,8 +24,4 @@
     opacity: 1;
     transform: scale(1);
   }
-}
-
-.toggle-auth-btn {
-  @apply text-slate-500 hover:text-cyan-400 text-sm font-medium transition-colors underline underline-offset-4;
 }

@@ -38,11 +38,6 @@ const increment = () => setCount((prev) => prev + 1)
 - Las stores deben ser modularizadas por dominio
 - Evitar estado global innecesario
 
-#### React Query (TanStack Query)
-
-- Usar **TanStack Query** para consumo de APIs
-- Aprovechar caché, reintentos y manejo de errores
-- Separar queries y mutations por dominio
 
 ### 4. Persistencia de Datos
 
@@ -260,6 +255,8 @@ Antes de hacer commit, verificar:
 - [ ] ¿Los efectos secundarios están minimizados y controlados?
 - [ ] ¿El componente tiene su archivo de testing?
 - [ ] ¿Los estilos usan `@apply` de Tailwind cuando corresponde?
+- [ ] ¿Se usan las herramientas y librerías correctas?
+- [ ] ¿Se debe verificar el responsive de la aplicación?
 
 ## Herramientas y Librerías
 
@@ -268,7 +265,6 @@ Antes de hacer commit, verificar:
 | Lenguaje | TypeScript |
 | Framework | React 19+ |
 | Estado Global | Zustand |
-| Server State | TanStack Query |
 | Estilos | Tailwind CSS 4+ |
 | Testing | Vitest + React Testing Library |
 | Build | Vite |

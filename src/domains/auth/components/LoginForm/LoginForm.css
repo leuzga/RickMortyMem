@@ -1,22 +1,80 @@
 @import "tailwindcss";
 
-@reference flex, flex-col, gap-4, w-full, max-w-sm, bg-slate-800/50, backdrop-blur-sm, p-6, rounded-xl, border, border-slate-700/50, shadow-2xl;
-@reference text-xs, font-medium, text-slate-400, uppercase, tracking-wider;
-@reference px-3, py-2, bg-slate-700/50, border, border-slate-600/50, rounded-lg, text-white, placeholder-slate-500, focus:outline-none, focus:ring-2, focus:ring-cyan-500/50, focus:border-cyan-500/50, transition-all;
-@reference py-2, px-4, bg-gradient-to-r, from-cyan-500, to-blue-500, text-white, font-bold, rounded-lg, hover:from-cyan-600, hover:to-blue-600, focus:outline-none, focus:ring-2, focus:ring-cyan-500/50, disabled:opacity-50, disabled:cursor-not-allowed, transition-all;
+@reference flex, flex-col, space-y-4, w-full;
+@reference block, text-sm, font-medium, text-gray-700, mb-1;
+@reference w-full, px-3, py-2, border, border-gray-300, rounded-md, placeholder-gray-400, focus:outline-none, focus:ring-2, focus:ring-purple-500, focus:border-transparent;
+@reference flex, items-center, justify-between, mb-4;
+@reference flex, items-center, space-x-2;
+@reference h-4, w-4, text-purple-600, focus:ring-purple-500, border-gray-300, rounded;
+@reference text-sm, text-gray-600;
+@reference text-sm, text-purple-600, hover:text-purple-500;
+@reference text-red-500, text-xs, mt-2;
+@reference flex, space-x-3, mt-6;
+@reference flex-1, py-2, px-4, border, border-transparent, rounded-md, shadow-sm, text-sm, font-medium, focus:outline-none, focus:ring-2, focus:ring-offset-2;
+@reference bg-purple-600, text-white, hover:bg-purple-700, focus:ring-purple-500;
+@reference bg-transparent, text-purple-600, border-purple-600, hover:bg-purple-50, focus:ring-purple-500;
+@reference disabled:opacity-50, disabled:cursor-not-allowed;
 
-.auth-form {
-  @apply flex flex-col gap-4 w-full max-w-sm bg-slate-800/50 backdrop-blur-sm p-6 rounded-xl border border-slate-700/50 shadow-2xl;
+.login-form {
+  @apply flex flex-col space-y-4 w-full;
 }
 
-.auth-label {
-  @apply text-xs font-medium text-slate-400 uppercase tracking-wider;
+.login-form__field {
+  @apply flex flex-col;
 }
 
-.auth-input {
-  @apply w-full px-3 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500/50 transition-all;
+.login-form__label {
+  @apply block text-sm font-medium text-gray-700 mb-1;
 }
 
-.auth-button {
-  @apply w-full py-2 px-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg hover:from-cyan-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all;
+.login-form__input {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900;
+}
+
+.login-form__input:focus {
+  border-left: 4px solid rgb(147, 51, 234);
+}
+
+.login-form__options {
+  @apply flex items-center justify-between mb-4;
+}
+
+.login-form__checkbox {
+  @apply flex items-center space-x-2;
+}
+
+.login-form__checkbox-input {
+  @apply h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded;
+}
+
+.login-form__checkbox-label {
+  @apply text-sm text-gray-600;
+}
+
+.login-form__forgot {
+  @apply text-sm text-purple-600 hover:text-purple-500;
+}
+
+.login-form__validation-errors {
+  @apply space-y-1;
+}
+
+.login-form__error {
+  @apply text-red-500 text-xs mt-2;
+}
+
+.login-form__actions {
+  @apply flex space-x-3 mt-6;
+}
+
+.login-form__button {
+  @apply flex-1 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.login-form__button--primary {
+  @apply bg-purple-600 text-white hover:bg-purple-700 focus:ring-purple-500;
+}
+
+.login-form__button--secondary {
+  @apply bg-transparent text-purple-600 border-purple-600 hover:bg-purple-50 focus:ring-purple-500;
 }

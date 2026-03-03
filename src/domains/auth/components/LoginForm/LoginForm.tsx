@@ -1,34 +1,93 @@
 import React from 'react';
 import { useLoginForm } from './useLoginForm';
+import { OAuthButtons } from '../OAuthButtons/OAuthButtons';
+import { AUTH_UI } from '../../constants/auth.constants';
 import './LoginForm.css';
 
-export const LoginForm: React.FC = () => {
-  const { form, isLoading, error, handleChange, handleSubmit } = useLoginForm();
+interface LoginFormProps {
+  onRegisterClick: () => void;
+  onForgotPasswordClick: () => void;
+}
+
+export const LoginForm: React.FC<LoginFormProps> = ({ onRegisterClick, onForgotPasswordClick }) => {
+  const { form, isLoading, error, validationErrors, handleChange, handleSubmit } = useLoginForm();
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit}>
-      <header className="text-center mb-4">
-        <h1 className="text-3xl font-black text-white italic">INGRESAR AL PORTAL</h1>
-        <p className="text-gray-500 text-sm">Conecta con tu identidad interdimensional</p>
-      </header>
-
-      <div className="flex flex-col gap-1">
-        <label className="auth-label">Username</label>
+    <form className="login-form" onSubmit={handleSubmit} noValidate>
+      <div className="login-form__field">
+        <label className="login-form__label">{AUTH_UI.LOGIN.EMAIL_LABEL}</label>
         <input
-          name="username"
-          className="auth-input"
-          value={form.username}
+          name="email"
+          type="email"
+          className="login-form__input"
+          value={form.email}
           onChange={handleChange}
-          placeholder="Rick_C137"
+          placeholder={AUTH_UI.LOGIN.EMAIL_PLACEHOLDER}
           required
         />
       </div>
 
-      {error && <p className="text-red-500 text-xs font-bold text-center">{error}</p>}
+      <div className="login-form__field">
+        <label className="login-form__label">{AUTH_UI.LOGIN.PASSWORD_LABEL}</label>
+        <input
+          name="password"
+          type="password"
+          className="login-form__input"
+          value={form.password}
+          onChange={handleChange}
+          placeholder={AUTH_UI.LOGIN.PASSWORD_PLACEHOLDER}
+          required
+        />
+      </div>
 
-      <button className="auth-button" type="submit" disabled={isLoading}>
-        {isLoading ? 'Abriendo portal...' : 'Ingresar'}
-      </button>
+      <div className="login-form__options">
+        <label className="login-form__checkbox">
+          <input
+            name="rememberMe"
+            type="checkbox"
+            className="login-form__checkbox-input"
+            checked={form.rememberMe || false}
+            onChange={handleChange}
+          />
+          <span className="login-form__checkbox-label">{AUTH_UI.LOGIN.REMEMBER_ME_LABEL}</span>
+        </label>
+        <button
+          type="button"
+          className="login-form__forgot"
+          onClick={onForgotPasswordClick}
+        >
+          {AUTH_UI.LOGIN.FORGOT_PASSWORD_LINK}
+        </button>
+      </div>
+
+      {validationErrors.length > 0 && (
+        <div className="login-form__validation-errors">
+          {validationErrors.map((err, index) => (
+            <p key={index} className="login-form__error">{err}</p>
+          ))}
+        </div>
+      )}
+
+      {error && <p className="login-form__error">{error}</p>}
+
+      <div className="login-form__actions">
+        <button
+          type="submit"
+          className="login-form__button login-form__button--primary"
+          disabled={isLoading}
+        >
+          {isLoading ? AUTH_UI.LOGIN.SUBMIT_LOADING : AUTH_UI.LOGIN.SUBMIT_BUTTON}
+        </button>
+        <button
+          type="button"
+          className="login-form__button login-form__button--secondary"
+          onClick={onRegisterClick}
+        >
+          {AUTH_UI.LOGIN.REGISTER_BUTTON}
+        </button>
+      </div>
+
+      <OAuthButtons />
     </form>
   );
 };

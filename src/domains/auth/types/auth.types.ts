@@ -14,10 +14,13 @@ export interface AuthResponse {
 }
 
 export interface LoginCredentials {
-  username: string;
+  email: string;
+  password: string;
+  rememberMe?: boolean;
 }
 
 export interface RegisterCredentials {
   username: string;
   email: string;
+  password: string;
 }

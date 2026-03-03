@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+@reference fixed, top-4, right-4, z-50, flex, flex-col, gap-2;
+@reference flex, items-center, gap-3, p-4, rounded-lg, shadow-lg, max-w-sm, min-w-72;
+@reference bg-white, text-gray-800, border-l-4;
+@reference bg-green-50, text-green-800, border-green-500;
+@reference bg-red-50, text-red-800, border-red-500;
+@reference bg-yellow-50, text-yellow-800, border-yellow-500;
+@reference bg-blue-50, text-blue-800, border-blue-500;
+@reference flex-shrink-0, w-5, h-5, rounded-full, flex, items-center, justify-center, text-sm, font-bold;
+@reference bg-green-500, text-white;
+@reference bg-red-500, text-white;
+@reference bg-yellow-500, text-white;
+@reference bg-blue-500, text-white;
+@reference flex-1, text-sm, font-medium;
+@reference ml-auto, text-gray-400, hover:text-gray-600, text-xl, leading-none, cursor-pointer, p-1;
+@reference transform, translate-x-full, opacity-0;
+@reference transform, translate-x-0, opacity-100;
+@reference transition-all, duration-300, ease-in-out;
+
+.toast-container {
+  @apply fixed top-4 right-4 z-50 flex flex-col gap-2;
+}
+
+.toast {
+  @apply flex items-center gap-3 p-4 rounded-lg shadow-lg max-w-sm min-w-72 transform translate-x-full opacity-0 transition-all duration-300 ease-in-out;
+}
+
+.toast--show {
+  @apply transform translate-x-0 opacity-100;
+}
+
+.toast--success {
+  @apply bg-green-50 text-green-800 border-l-4 border-green-500;
+}
+
+.toast--error {
+  @apply bg-red-50 text-red-800 border-l-4 border-red-500;
+}
+
+.toast--warning {
+  @apply bg-yellow-50 text-yellow-800 border-l-4 border-yellow-500;
+}
+
+.toast--info {
+  @apply bg-blue-50 text-blue-800 border-l-4 border-blue-500;
+}
+
+.toast__icon {
+  @apply flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-sm font-bold;
+}
+
+.toast--success .toast__icon {
+  @apply bg-green-500 text-white;
+}
+
+.toast--error .toast__icon {
+  @apply bg-red-500 text-white;
+}
+
+.toast--warning .toast__icon {
+  @apply bg-yellow-500 text-white;
+}
+
+.toast--info .toast__icon {
+  @apply bg-blue-500 text-white;
+}
+
+.toast__message {
+  @apply flex-1 text-sm font-medium;
+}
+
+.toast__close {
+  @apply shrink-0 p-1 rounded hover:bg-gray-200 hover:bg-gray-700 transition-colors leading-none cursor-pointer p-1;
+}
+
+/* Animaciones */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.toast {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.toast--removing {
+  animation: slideOutRight 0.3s ease-in;
+}

@@ -1,47 +1,84 @@
 import React from 'react';
 import { useRegisterForm } from './useRegisterForm';
+import { AUTH_UI } from '../../constants/auth.constants';
 import './RegisterForm.css';
 
-export const RegisterForm: React.FC = () => {
-  const { form, isLoading, error, handleChange, handleSubmit } = useRegisterForm();
+interface RegisterFormProps {
+  onLoginClick: () => void;
+}
+
+export const RegisterForm: React.FC<RegisterFormProps> = ({ onLoginClick }) => {
+  const { form, isLoading, error, validationErrors, handleChange, handleSubmit } = useRegisterForm({
+    onSuccess: onLoginClick
+  });
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit}>
-      <header className="text-center mb-4">
-        <h1 className="text-3xl font-black text-white italic">ÚNETE AL JUEGO</h1>
-        <p className="text-gray-500 text-sm">Crea tu identidad interdimensional</p>
-      </header>
-
-      <div className="flex flex-col gap-1">
-        <label className="auth-label">Username</label>
+    <form className="register-form" onSubmit={handleSubmit} noValidate>
+      <div className="register-form__field">
+        <label className="register-form__label">{AUTH_UI.REGISTER.USERNAME_LABEL}</label>
         <input
           name="username"
-          className="auth-input"
+          type="text"
+          className="register-form__input"
           value={form.username}
           onChange={handleChange}
-          placeholder="Rick_C137"
+          placeholder={AUTH_UI.REGISTER.USERNAME_PLACEHOLDER}
           required
         />
       </div>
 
-      <div className="flex flex-col gap-1">
-        <label className="auth-label">Email</label>
+      <div className="register-form__field">
+        <label className="register-form__label">{AUTH_UI.REGISTER.EMAIL_LABEL}</label>
         <input
           name="email"
           type="email"
-          className="auth-input"
+          className="register-form__input"
           value={form.email}
           onChange={handleChange}
-          placeholder="rick@citadel.com"
+          placeholder={AUTH_UI.REGISTER.EMAIL_PLACEHOLDER}
           required
         />
       </div>
 
-      {error && <p className="text-red-500 text-xs font-bold text-center">{error}</p>}
+      <div className="register-form__field">
+        <label className="register-form__label">{AUTH_UI.REGISTER.PASSWORD_LABEL}</label>
+        <input
+          name="password"
+          type="password"
+          className="register-form__input"
+          value={form.password}
+          onChange={handleChange}
+          placeholder={AUTH_UI.REGISTER.PASSWORD_PLACEHOLDER}
+          required
+        />
+      </div>
 
-      <button className="auth-button" type="submit" disabled={isLoading}>
-        {isLoading ? 'Teletransportando...' : 'Registrarme'}
-      </button>
+      {validationErrors.length > 0 && (
+        <div className="register-form__validation-errors">
+          {validationErrors.map((err, index) => (
+            <p key={index} className="register-form__error">{err}</p>
+          ))}
+        </div>
+      )}
+
+      {error && <p className="register-form__error">{error}</p>}
+
+      <div className="register-form__actions">
+        <button
+          type="submit"
+          className="register-form__button register-form__button--primary"
+          disabled={isLoading}
+        >
+          {isLoading ? AUTH_UI.REGISTER.SUBMIT_LOADING : AUTH_UI.REGISTER.SUBMIT_BUTTON}
+        </button>
+        <button
+          type="button"
+          className="register-form__button register-form__button--secondary"
+          onClick={onLoginClick}
+        >
+          {AUTH_UI.REGISTER.LOGIN_BUTTON}
+        </button>
+      </div>
     </form>
   );
 };
