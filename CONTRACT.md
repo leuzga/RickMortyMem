@@ -1,68 +1,187 @@
-# Contrato de Desarrollo - Memory Project
+# Project Architecture Contract
 
-## Principios Fundamentales
+## Overview
 
-### 1. Sistema de Tipos
+This document defines the architectural contract and coding standards for the **Memory** project. All development must adhere to these principles without exception.
 
-- **Todo el código debe estar escrito en TypeScript**
-- **Nunca usar `any`** en definiciones de tipos
-- Todos los tipos deben ser explícitos y bien definidos
-- Usar interfaces y tipos genéricos cuando sea apropiado
-- Evitar `unknown` salvo que sea estrictamente necesario y esté justificado
+---
 
-### 2. Paradigma de Programación
+## 1. Language & Type System
 
-- **Programación Funcional** como paradigma principal
-- Priorizar **funciones puras** sobre funciones con efectos secundarios
-- Cada función debe tener **responsabilidad única**
-- Las funciones deben ser **independientes** y composables
-- Evitar mutación de estado, usar inmutabilidad en todas las operaciones
+### 1.1 TypeScript Mandatory
 
-### 3. Gestión de Estado
-
-#### useState
-
-- **Siempre usar el valor previo** para actualizaciones de estado
-- ❌ Incorrecto: `setCount(count + 1)`
-- ✅ Correcto: `setCount((prev) => prev + 1)`
+- **All code must be written in TypeScript**
+- No JavaScript files (`.js`, `.jsx`) allowed in source code
+- Strict mode enabled (`"strict": true` in `tsconfig.json`)
+- No `any` type unless absolutely unavoidable (use `unknown` instead)
+- Explicit return types for all functions
+- Proper interface/type definitions for all data structures
 
 ```typescript
-// Ejemplo correcto
-const [count, setCount] = useState<number>(0)
-const increment = () => setCount((prev) => prev + 1)
+// ✅ Correct
+interface User {
+  id: string
+  name: string
+  email: string
+}
+
+const getUserById = (id: string): User | null => {
+  // implementation
+}
+
+// ❌ Incorrect
+const getUserById = (id) => {
+  // no types
+}
 ```
 
-#### Zustand
+---
 
-- Usar **Zustand** para estado global de la aplicación
-- Las stores deben ser modularizadas por dominio
-- Evitar estado global innecesario
+## 2. Functional Programming Paradigm
 
+### 2.1 Core Principles
 
-### 4. Persistencia de Datos
+All code must follow functional programming principles:
 
-- **localStorage** para persistir el token de OAuth
-- Nunca almacenar tokens en estado global sin persistencia
-- Implementar mecanismos seguros de almacenamiento
+1. **Pure Functions First**
+   - Functions must return the same output for the same input
+   - No side effects (mutations, I/O, DOM manipulation)
+   - No dependency on external mutable state
+
+2. **Single Responsibility**
+   - Each function does ONE thing and does it well
+   - Small, composable functions over large monolithic ones
+
+3. **Immutability**
+   - No direct mutations of objects or arrays
+   - Use spread operators, `map`, `filter`, `reduce`
+   - Libraries: Immer (if needed for complex state)
+
+4. **Function Composition**
+   - Build complex logic by composing small functions
+   - Use pipe/pattern for data transformations
 
 ```typescript
-// Ejemplo de persistencia de token
+// ✅ Pure function
+const calculateTotal = (items: Item[]): number =>
+  items.reduce((sum, item) => sum + item.price, 0)
+
+// ✅ Single responsibility
+const validateEmail = (email: string): boolean =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+// ❌ Impure - has side effect
+let counter = 0
+const increment = () => {
+  counter++ // mutation!
+}
+```
+
+### 2.2 Function Categories
+
+| Category | Description | Rules |
+|----------|-------------|-------|
+| **Pure** | No side effects, deterministic | Preferred for all business logic |
+| **Impure** | I/O, API calls, DOM, state | Minimize, isolate, wrap in boundaries |
+| **Custom Hooks** | React integration | Must be pure wrappers or state managers |
+
+---
+
+## 3. React State Management
+
+### 3.1 useState with Previous Value
+
+All state updates must use the previous value:
+
+```typescript
+// ✅ Correct - uses previous state
+const [count, setCount] = useState<number>(0)
+setCount(prev => prev + 1)
+
+// ✅ Correct - object update
+const [user, setUser] = useState<User | null>(null)
+setUser(prev => prev ? { ...prev, name: 'New Name' } : null)
+
+// ❌ Incorrect - direct reference
+setCount(count + 1) // May use stale state
+```
+
+### 3.2 Zustand for Global State
+
+- Use **Zustand** for global application state
+- Stores must be pure functions with isolated side effects
+- No direct state mutations outside store actions
+
+```typescript
+// stores/authStore.ts
+import { create } from 'zustand'
+
+interface AuthState {
+  user: User | null
+  isAuthenticated: boolean
+  login: (user: User) => void
+  logout: () => void
+}
+
+export const useAuthStore = create<AuthState>()(set => ({
+  user: null,
+  isAuthenticated: false,
+  login: (user) => set(() => ({ user, isAuthenticated: true })),
+  logout: () => set(() => ({ user: null, isAuthenticated: false })),
+}))
+```
+
+### 3.3 React Tank (TanStack Query) for API
+
+- Use **TanStack Query** (`@tanstack/react-query`) for server state
+- Separate server state from UI state
+- Leverage caching, refetching, and optimistic updates
+
+```typescript
+// hooks/useUsers.ts
+import { useQuery } from '@tanstack/react-query'
+import { fetchUsers } from '@/services/api/users'
+
+export const useUsers = () =>
+  useQuery({
+    queryKey: ['users'],
+    queryFn: fetchUsers,
+  })
+```
+
+---
+
+## 4. OAuth Token Persistence
+
+### 4.1 localStorage for Token Storage
+
+- OAuth tokens MUST be stored in `localStorage`
+- Token access must be encapsulated in dedicated functions
+- Implement token refresh logic before expiration
+
+```typescript
+// services/auth/token.ts
 const TOKEN_KEY = 'oauth_token'
 
-const saveToken = (token: string): void => {
+export const getToken = (): string | null =>
+  localStorage.getItem(TOKEN_KEY)
+
+export const setToken = (token: string): void =>
   localStorage.setItem(TOKEN_KEY, token)
-}
 
-const getToken = (): string | null => {
-  return localStorage.getItem(TOKEN_KEY)
-}
-
-const removeToken = (): void => {
+export const removeToken = (): void =>
   localStorage.removeItem(TOKEN_KEY)
+
+export const isTokenExpired = (token: string): boolean => {
+  // validation logic
 }
 ```
 
-### 5. Arquitectura por Dominios y Módulos
+---
+
+## 5. Architecture by Domains & Modules
+
+### 5.1 Domain-Driven Structure
 
 ```
 src/
@@ -71,217 +190,325 @@ src/
 │   │   ├── components/
 │   │   ├── hooks/
 │   │   ├── services/
+│   │   ├── stores/
 │   │   ├── types/
-│   │   ├── utils/
-│   │   └── store/
-│   ├── user/
-│   └── dashboard/
+│   │   └── utils/
+│   ├── users/
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── services/
+│   │   ├── stores/
+│   │   ├── types/
+│   │   └── utils/
+│   └── [domain]/
 ├── shared/
 │   ├── components/
 │   ├── hooks/
 │   ├── services/
+│   ├── types/
 │   └── utils/
+├── App.tsx
+└── main.tsx
 ```
 
-### 6. Estructura de Componentes
+### 5.2 Module Separation
 
-Cada componente debe tener:
+Each domain is self-contained:
+- Own components
+- Own hooks
+- Own services (API calls)
+- Own state (Zustand stores)
+- Own types
+- Own utilities
 
-1. **Template JSX** - Estructura visual del componente
-2. **Lógica en TypeScript** - Funcionalidad separada en hooks/functions
-3. **CSS con Tailwind** - Usando `@apply` para clases reutilizables
-4. **Archivo de Testing** - Tests para cada funcionalidad
+**No cross-domain imports** except through shared module or explicit domain exports.
+
+---
+
+## 6. Component Structure
+
+### 6.1 File Separation
+
+Each component must have:
 
 ```
 ComponentName/
-├── ComponentName.tsx       # Componente principal
-├── ComponentName.test.tsx  # Tests
-├── ComponentName.css       # Estilos con @apply
-└── useComponentName.ts     # Hook personalizado (si aplica)
+├── ComponentName.tsx      # JSX template + TypeScript logic
+├── ComponentName.css      # Styles with @apply
+├── ComponentName.test.tsx # Tests
+└── index.ts               # Exports
 ```
 
-### 7. Custom Hooks
-
-- **Evaluar siempre** si la lógica puede ser un custom hook
-- Los custom hooks deben ser **funciones puras** cuando sea posible
-- Reutilizar código a través de custom hooks
-- Mantener hooks pequeños y con responsabilidad única
+### 6.2 Component Template
 
 ```typescript
-// Ejemplo de custom hook puro
-const useCounter = (initialValue: number = 0) => {
-  const [count, setCount] = useState<number>(initialValue)
+// ComponentName.tsx
+import { useState, useCallback } from 'react'
+import './ComponentName.css'
+
+interface ComponentNameProps {
+  /* props definition */
+}
+
+export const ComponentName = ({ prop }: ComponentNameProps) => {
+  // State with previous value pattern
+  const [state, setState] = useState<Type>(initialValue)
+  
+  // Handlers using previous state
+  const handleClick = useCallback(() => {
+    setState(prev => /* transformation */)
+  }, [])
+
+  return (
+    <div className="component-name">
+      {/* JSX */}
+    </div>
+  )
+}
+```
+
+### 6.3 CSS with @apply
+
+```css
+/* ComponentName.css */
+.component-name {
+  @apply flex items-center justify-center p-4 bg-brand text-white rounded-lg;
+}
+
+.component-name__button {
+  @apply px-6 py-2 hover:opacity-90 transition-opacity;
+}
+```
+
+---
+
+## 7. Custom Hooks
+
+### 7.1 Evaluation Criteria
+
+Before writing logic inside a component, evaluate:
+
+1. **Can this be a custom hook?**
+   - Stateful logic
+   - Side effects
+   - Complex computations
+   - API interactions
+
+2. **Is it reusable?**
+   - Could other components need this?
+   - Does it encapsulate domain logic?
+
+### 7.2 Custom Hooks Must Be Pure
+
+```typescript
+// ✅ Pure custom hook
+export const useCounter = (initialValue: number = 0) => {
+  const [count, setCount] = useState(initialValue)
   
   const increment = useCallback(() => {
-    setCount((prev) => prev + 1)
+    setCount(prev => prev + 1)
   }, [])
   
   const decrement = useCallback(() => {
-    setCount((prev) => prev - 1)
+    setCount(prev => prev - 1)
   }, [])
   
   const reset = useCallback(() => {
     setCount(initialValue)
   }, [initialValue])
-  
+
   return { count, increment, decrement, reset }
 }
+
+// ❌ Impure - external dependency
+let externalCounter = 0
+export const useCounter = () => {
+  const [count, setCount] = useState(externalCounter) // external state!
+}
 ```
 
-### 8. Consumo de APIs
+---
 
-#### Archivo Específico para Servicios API
+## 8. API Services Layer
 
-- Crear un archivo/módulo específico para consumo de APIs
-- Las funciones de API deben tener **mínima exposición** como efecto secundario
-- **Validar toda la data recibida** del API antes de usarla
-- Manejar y evitar errores proactivamente
+### 8.1 Dedicated API Module
+
+All API consumption must go through the services layer:
+
+```
+src/
+└── services/
+    ├── api/
+    │   ├── client.ts       # Axios/fetch configuration
+    │   ├── auth.ts         # Auth endpoints
+    │   ├── users.ts        # Users endpoints
+    │   └── [resource].ts
+    └── interceptors/
+        └── auth.interceptor.ts
+```
+
+### 8.2 Minimal Side Effect Exposure
+
+API functions are inherently impure (I/O). Minimize exposure:
 
 ```typescript
-// domains/auth/services/auth.api.ts
-import { ApiResponse, User, AuthTokens } from '../types'
+// services/api/users.ts
+import { apiClient } from './client'
+import type { User } from '@/domains/users/types'
 
-// Función pura de validación
-const validateUserResponse = (data: unknown): User => {
-  if (!data || typeof data !== 'object') {
-    throw new Error('Invalid user response')
-  }
-  
-  const user = data as Record<string, unknown>
-  
-  if (typeof user.id !== 'string' || typeof user.name !== 'string') {
-    throw new Error('Invalid user data structure')
-  }
-  
-  return user as User
+// Pure transformation functions
+const parseUser = (data: unknown): User => {
+  // validation and transformation
 }
 
-// Función con efecto secundario controlado (mínima exposición)
-export const login = async (
-  credentials: LoginCredentials
-): Promise<ApiResponse<AuthTokens>> => {
+const parseUsers = (data: unknown): User[] => {
+  // validation and transformation
+}
+
+// Impure - but isolated
+export const fetchUsers = async (): Promise<User[]> => {
+  const response = await apiClient.get('/users')
+  return parseUsers(response.data)
+}
+
+export const fetchUserById = async (id: string): Promise<User> => {
+  const response = await apiClient.get(`/users/${id}`)
+  return parseUser(response.data)
+}
+```
+
+### 8.3 Error Handling & Validation
+
+```typescript
+// services/api/client.ts
+import axios, { AxiosError } from 'axios'
+import { getToken, removeToken } from '@/services/auth/token'
+
+export const apiClient = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+// Request interceptor - attach token
+apiClient.interceptors.request.use(config => {
+  const token = getToken()
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+
+// Response interceptor - handle errors
+apiClient.interceptors.response.use(
+  response => response,
+  (error: AxiosError) => {
+    if (error.response?.status === 401) {
+      removeToken()
+      window.location.href = '/login'
+    }
+    return Promise.reject(error)
+  }
+)
+```
+
+### 8.4 Service Function Contract
+
+```typescript
+// Template for all service functions
+/**
+ * Fetches [resource] from API
+ * @param param - Description
+ * @returns Promise<ReturnType>
+ * @throws AxiosError on network/API errors
+ */
+export const [action][Resource] = async (param: Type): Promise<ReturnType> => {
   try {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials),
+    const response = await apiClient.get('/endpoint')
+    return parse[Resource](response.data)
+  } catch (error) {
+    // Log and rethrow - let React Query handle UI errors
+    console.error('[Service] Error fetching resource:', error)
+    throw error
+  }
+}
+```
+
+---
+
+## 9. Testing Requirements
+
+### 9.1 Test File for Every Component
+
+```typescript
+// ComponentName.test.tsx
+import { render, screen } from '@testing-library/react'
+import { describe, it, expect } from 'vitest'
+import { ComponentName } from './ComponentName'
+
+describe('ComponentName', () => {
+  it('renders correctly', () => {
+    render(<ComponentName prop="value" />)
+    expect(screen.getByText(/expected/i)).toBeInTheDocument()
+  })
+})
+```
+
+### 9.2 Test Pure Functions Separately
+
+```typescript
+// utils.test.ts
+import { describe, it, expect } from 'vitest'
+import { calculateTotal, validateEmail } from './utils'
+
+describe('Pure Functions', () => {
+  describe('calculateTotal', () => {
+    it('calculates sum correctly', () => {
+      const items = [{ price: 10 }, { price: 20 }]
+      expect(calculateTotal(items)).toBe(30)
     })
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error: ${response.status}`)
-    }
-    
-    const data = await response.json()
-    const validatedData = validateUserResponse(data)
-    
-    return { success: true, data: validatedData }
-  } catch (error) {
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Unknown error'
-    }
-  }
-}
+  })
+})
 ```
 
-### 9. Validaciones de Data del API
+---
 
-- **Nunca confiar** en la data recibida del API
-- Crear funciones validadoras para cada tipo de respuesta
-- Usar type guards para validar estructuras
-- Retornar errores descriptivos cuando la validación falle
+## 10. Best Practices Summary
 
-```typescript
-// shared/utils/validators.ts
-export const isObject = (value: unknown): value is Record<string, unknown> => {
-  return typeof value === 'object' && value !== null && !Array.isArray(value)
-}
+| Principle | Implementation |
+|-----------|----------------|
+| **Type Safety** | TypeScript strict mode, no `any` |
+| **Purity** | Pure functions for business logic |
+| **Immutability** | No mutations, use spread/immer |
+| **Single Responsibility** | One function = one job |
+| **Composition** | Build complex from simple |
+| **State Updates** | Always use previous value |
+| **API Isolation** | Services layer with error handling |
+| **Testing** | Test file for every component/hook |
+| **Domain Separation** | No cross-domain coupling |
 
-export const hasRequiredKeys = <T extends string>(
-  obj: Record<string, unknown>,
-  keys: T[]
-): obj is Record<T, unknown> => {
-  return keys.every((key) => key in obj)
-}
-```
+---
 
-### 10. Funciones Puras vs Impuras
+## 11. Quick Reference Checklist
 
-#### Funciones Puras (Priorizar)
+Before committing code, verify:
 
-- Mismo input → mismo output siempre
-- Sin efectos secundarios
-- Sin mutación de estado externo
+- [ ] TypeScript types defined (no `any`)
+- [ ] Functions are pure (or impure isolated)
+- [ ] Single responsibility per function
+- [ ] useState uses previous value (`prev => ...`)
+- [ ] Custom hook extracted if reusable
+- [ ] API calls through services layer
+- [ ] Error handling in place
+- [ ] Test file created/updated
+- [ ] CSS uses `@apply`
+- [ ] Domain boundaries respected
 
-```typescript
-// ✅ Función pura
-const calculateTotal = (prices: number[]): number => {
-  return prices.reduce((sum, price) => sum + price, 0)
-}
-```
+---
 
-#### Funciones Impuras (Minimizar)
+## Version
 
-- Efectos secundarios controlados y aislados
-- Documentar claramente cuando una función es impura
-- Envolver efectos secundarios en funciones puras cuando sea posible
-
-```typescript
-// ✅ Función impura con efecto secundario controlado
-const saveToStorage = (key: string, value: string): Result<void, Error> => {
-  try {
-    localStorage.setItem(key, value)
-    return { success: true }
-  } catch (error) {
-    return { 
-      success: false, 
-      error: error instanceof Error ? error : new Error('Storage error')
-    }
-  }
-}
-```
-
-## Checklist de Revisión de Código
-
-Antes de hacer commit, verificar:
-
-- [ ] ¿Todo el código está en TypeScript?
-- [ ] ¿No hay ningún `any` en los tipos?
-- [ ] ¿Las funciones son puras cuando es posible?
-- [ ] ¿Cada función tiene responsabilidad única?
-- [ ] ¿Los useState usan el valor previo para actualizaciones?
-- [ ] ¿La lógica podría estar en un custom hook reutilizable?
-- [ ] ¿La data del API está validada antes de usarse?
-- [ ] ¿Los efectos secundarios están minimizados y controlados?
-- [ ] ¿El componente tiene su archivo de testing?
-- [ ] ¿Los estilos usan `@apply` de Tailwind cuando corresponde?
-- [ ] ¿Se usan las herramientas y librerías correctas?
-- [ ] ¿Se debe verificar el responsive de la aplicación?
-
-
-## 11. Instrucciones para Agentes de IA (System Prompt)
-
-Cualquier agente de IA que trabaje en este proyecto debe adherirse al siguiente perfil de comportamiento:
-
-> **Perfil:** Senior Fullstack Architect enfocado en eficiencia de tokens.
-> **Regla de Verbose:** Omitir introducciones y explicaciones básicas. Respuestas directas al código.
-> **Prioridad:** Aplicar estrictamente los puntos 1 al 10 de este contrato.
-> **Formato:** Proporcionar bloques de código optimizados y una breve lista de verificación técnica al final.
-
-## Herramientas y Librerías
-
-| Propósito | Librería |
-|-----------|----------|
-| Lenguaje | TypeScript |
-| Framework | React 19+ |
-| Estado Global | Zustand |
-| Estilos | Tailwind CSS 4+ |
-| Testing | Vitest + React Testing Library |
-| Build | Vite |
-
-## Referencias
-
-- [Functional Programming en TypeScript](https://www.typescriptlang.org/)
-- [Zustand Documentation](https://zustand-demo.pmnd.rs/)
-- [TanStack Query Documentation](https://tanstack.com/query)
-- [Tailwind CSS v4](https://tailwindcss.com/)
+- **Contract Version:** 1.0.0
+- **Last Updated:** 2026-03-02
+- **Project:** Memory

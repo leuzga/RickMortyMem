@@ -38,4 +38,5 @@ coverage/
 # Documentation files - ignore all .md and .pdf except README.md in root
 *.md
 !README.md
+!CONTRACT.md
 *.pdf
