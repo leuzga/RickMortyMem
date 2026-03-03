@@ -3,6 +3,10 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { RegisterCredentials } from '../../types/auth.types';
 import { validateRegisterCredentials } from '../../../../shared/utils/validators';
 
+interface UseRegisterFormProps {
+  onSuccess?: () => void;
+}
+
 interface UseRegisterFormReturn {
   form: RegisterCredentials;
   isLoading: boolean;
@@ -13,7 +17,7 @@ interface UseRegisterFormReturn {
   registrationSuccess: boolean;
 }
 
-export const useRegisterForm = (): UseRegisterFormReturn => {
+export const useRegisterForm = ({ onSuccess }: UseRegisterFormProps = {}): UseRegisterFormReturn => {
   const { register, isLoading, error, clearError } = useAuthStore();
   const [form, setForm] = useState<RegisterCredentials>({
     username: '',
@@ -63,8 +67,8 @@ export const useRegisterForm = (): UseRegisterFormReturn => {
     }
 
     console.log('✅ Submit continuando a register');
-    await register(form);
-  }, [form, register, validateForm]);
+    await register(form, onSuccess);
+  }, [form, register, validateForm, onSuccess]);
 
   return {
     form,
@@ -72,6 +76,7 @@ export const useRegisterForm = (): UseRegisterFormReturn => {
     error,
     validationErrors,
     handleChange,
-    handleSubmit
+    handleSubmit,
+    registrationSuccess: false
   };
 };
