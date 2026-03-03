@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { Card as CardType } from '../../types/game.types';
 import { GAME_UI } from '../../constants/game.constants';
 import './Card.css';
@@ -6,10 +6,30 @@ import './Card.css';
 interface CardProps {
   readonly card: CardType;
   readonly onClick: (card: CardType) => void;
+  readonly isShuffling?: boolean;
+  readonly shuffleIndex?: number;
 }
 
-export const Card: React.FC<CardProps> = ({ card, onClick }) => {
+export const Card: React.FC<CardProps> = ({ card, onClick, isShuffling = false, shuffleIndex = 0 }) => {
   const { cardId, image, name, isFlipped, isMatched } = card;
+
+  const shuffleVars = useMemo(() => {
+    if (!isShuffling) return {};
+
+    const angle = (shuffleIndex / 18) * Math.PI * 2;
+    const distance = 200 + Math.random() * 150;
+
+    return {
+      '--delay': `${shuffleIndex * 0.08}s`,
+      '--scatter-x': `${Math.cos(angle) * distance}px`,
+      '--scatter-y': `${Math.sin(angle) * distance}px`,
+      '--scatter-rotate': `${Math.random() * 720 - 360}deg`,
+      '--rotate-x': `${Math.random() * 720}deg`,
+      '--rotate-y': `${Math.random() * 1080}deg`,
+      '--particle-x': `${Math.random() * 2 - 1}`,
+      '--particle-y': `${Math.random()}`,
+    } as React.CSSProperties;
+  }, [isShuffling, shuffleIndex]);
 
   const handleClick = (): void => {
     if (!isFlipped && !isMatched) onClick(card);
@@ -24,13 +44,14 @@ export const Card: React.FC<CardProps> = ({ card, onClick }) => {
   return (
     <div
       id={`card-${cardId}`}
-      className={`card ${isFlipped ? 'card--flipped' : ''} ${isMatched ? 'card--matched' : ''}`}
+      className={`card ${isFlipped ? 'card--flipped' : ''} ${isMatched ? 'card--matched' : ''} ${isShuffling ? 'card--shuffling' : ''}`}
       onClick={handleClick}
       role="button"
       tabIndex={isFlipped || isMatched ? -1 : 0}
       aria-label={ariaLabel}
       aria-pressed={isFlipped}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick(); }}
+      style={shuffleVars}
     >
       <div className="card__inner">
         {/* Back face */}

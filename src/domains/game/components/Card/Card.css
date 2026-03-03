@@ -116,6 +116,188 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* ─── Shuffling Animation ─────────────────────────────────────────────────────*/
+
+.card--shuffling {
+  animation: 
+    card-emerge 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) var(--delay),
+    card-scatter 3s ease-in-out var(--delay),
+    card-land 1s cubic-bezier(0.34, 1.56, 0.64, 1) 4s,
+    energy-glow 5s ease-in-out;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+.card--shuffling .card__inner {
+  animation: inner-glow 5s ease-in-out;
+}
+
+/* Partículas de energía */
+.card--shuffling::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #00ff00;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  animation: 
+    particle-float 3s ease-out,
+    particle-fade 3s ease-out;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ─── Keyframes ───────────────────────────────────────────────────────────────*/
+
+@keyframes card-emerge {
+  0% {
+    transform: 
+      translateZ(-800px) 
+      scale(0.1) 
+      rotateY(0deg)
+      rotateX(0deg);
+    opacity: 0;
+    filter: brightness(3) blur(15px);
+  }
+  100% {
+    transform: 
+      translateZ(0) 
+      scale(1) 
+      rotateY(var(--rotate-y))
+      rotateX(var(--rotate-x));
+    opacity: 1;
+    filter: brightness(1.2) blur(0);
+  }
+}
+
+@keyframes card-scatter {
+  0% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  30% {
+    transform: 
+      translate(var(--scatter-x), var(--scatter-y))
+      rotate(var(--scatter-rotate))
+      scale(1.3);
+  }
+  60% {
+    transform: 
+      translate(calc(var(--scatter-x) * 0.5), calc(var(--scatter-y) * 0.5))
+      rotate(calc(var(--scatter-rotate) * 0.5))
+      scale(1.1);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+}
+
+@keyframes card-land {
+  0% {
+    transform: translateY(-30px) scale(1.15) rotateZ(5deg);
+  }
+  40% {
+    transform: translateY(8px) scale(0.92) rotateZ(-3deg);
+  }
+  70% {
+    transform: translateY(-5px) scale(1.03) rotateZ(2deg);
+  }
+  100% {
+    transform: translateY(0) scale(1) rotateZ(0deg);
+  }
+}
+
+@keyframes energy-glow {
+  0%, 100% {
+    box-shadow: 
+      0 0 10px rgba(0, 255, 0, 0.3),
+      0 0 20px rgba(0, 255, 0, 0.2);
+  }
+  20% {
+    box-shadow: 
+      0 0 40px rgba(0, 255, 0, 0.7),
+      0 0 80px rgba(0, 255, 0, 0.5),
+      0 0 120px rgba(0, 255, 0, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 0 30px rgba(0, 255, 0, 0.6),
+      0 0 60px rgba(0, 255, 0, 0.4);
+  }
+  80% {
+    box-shadow: 
+      0 0 20px rgba(0, 255, 0, 0.4),
+      0 0 40px rgba(0, 255, 0, 0.2);
+  }
+}
+
+@keyframes inner-glow {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 0 transparent);
+  }
+  30% {
+    filter: 
+      brightness(1.4) 
+      drop-shadow(0 0 25px rgba(0, 255, 0, 0.7))
+      drop-shadow(0 0 50px rgba(0, 255, 0, 0.4));
+  }
+  60% {
+    filter: 
+      brightness(1.2) 
+      drop-shadow(0 0 15px rgba(0, 255, 0, 0.5));
+  }
+}
+
+@keyframes particle-float {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(
+      calc(-50% + var(--particle-x) * 150px),
+      calc(-50% + var(--particle-y) * -200px)
+    ) scale(0.3);
+    opacity: 0;
+  }
+}
+
+@keyframes particle-fade {
+  0% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ─── Reduced Motion ──────────────────────────────────────────────────────────*/
+
+@media (prefers-reduced-motion: reduce) {
+  .card--shuffling {
+    animation: card-simple-fade 1s ease-out;
+  }
+  
+  .card--shuffling::after {
+    display: none;
+  }
+  
+  @keyframes card-simple-fade {
+    0% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
 /* ─── Responsive: tablet (2 cols → 4 cols handled by CardsGrid) ──────────────*/
 @media (min-width: 640px) {
   .card__name {

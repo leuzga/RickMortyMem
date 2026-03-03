@@ -52,7 +52,11 @@ export const GameBoard: React.FC = () => {
       </header>
 
       <main className="game-board__main">
-        <CardsGrid cards={cards} onCardClick={handleCardClick} />
+        <CardsGrid
+          cards={cards}
+          onCardClick={handleCardClick}
+          isShuffling={gameStatus === 'shuffling'}
+        />
       </main>
 
       {gameStatus === 'finished' && (

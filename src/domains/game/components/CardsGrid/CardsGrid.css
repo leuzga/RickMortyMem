@@ -3,9 +3,92 @@
 /* ─── CardsGrid — mobile first ───────────────────────────────────────────────*/
 
 .cards-grid {
-  @apply grid gap-2 w-full;
+  @apply grid gap-2 w-full relative;
   /* 6 columns × 3 rows - todas las cards visibles */
   grid-template-columns: repeat(6, 1fr);
+}
+
+/* ─── Portal Animation ────────────────────────────────────────────────────────*/
+
+.cards-grid--shuffling {
+  perspective: 1200px;
+}
+
+.cards-grid--shuffling::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle at center,
+      rgba(0, 255, 0, 0.5) 0%,
+      rgba(0, 255, 0, 0.3) 20%,
+      rgba(0, 255, 0, 0.15) 40%,
+      transparent 70%);
+  animation: portal-appear 5s ease-out;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(20px);
+}
+
+.cards-grid--shuffling::after {
+  content: '';
+  position: absolute;
+  inset: -10%;
+  background:
+    repeating-conic-gradient(from 0deg at 50% 50%,
+      transparent 0deg,
+      rgba(0, 255, 0, 0.1) 15deg,
+      transparent 30deg);
+  animation: portal-spin 5s linear;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 50%;
+}
+
+@keyframes portal-appear {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+    filter: blur(40px);
+  }
+
+  20% {
+    transform: scale(1.5) rotate(180deg);
+    opacity: 1;
+    filter: blur(10px);
+  }
+
+  80% {
+    transform: scale(2) rotate(720deg);
+    opacity: 0.8;
+    filter: blur(15px);
+  }
+
+  100% {
+    transform: scale(2.5) rotate(1080deg);
+    opacity: 0;
+    filter: blur(30px);
+  }
+}
+
+@keyframes portal-spin {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.6;
+  }
+
+  80% {
+    opacity: 0.4;
+  }
+
+  100% {
+    transform: rotate(1080deg) scale(1.5);
+    opacity: 0;
+  }
 }
 
 /* Tablet+ */

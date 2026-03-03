@@ -20,7 +20,7 @@ export interface Card {
   isMatched: boolean;
 }
 
-export type GameStatus = 'idle' | 'initializing' | 'showing' | 'playing' | 'finished';
+export type GameStatus = 'idle' | 'initializing' | 'shuffling' | 'showing' | 'playing' | 'finished';
 
 // ─── Store ────────────────────────────────────────────────────────────────────
 

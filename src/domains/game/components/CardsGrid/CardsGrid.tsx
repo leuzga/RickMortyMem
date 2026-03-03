@@ -6,12 +6,23 @@ import './CardsGrid.css';
 interface CardsGridProps {
   readonly cards: Card[];
   readonly onCardClick: (card: Card) => void;
+  readonly isShuffling?: boolean;
 }
 
-export const CardsGrid: React.FC<CardsGridProps> = ({ cards, onCardClick }) => (
-  <section className="cards-grid" aria-label="Tablero de juego" role="grid">
-    {cards.map((card) => (
-      <CardComponent key={card.cardId} card={card} onClick={onCardClick} />
+export const CardsGrid: React.FC<CardsGridProps> = ({ cards, onCardClick, isShuffling = false }) => (
+  <section
+    className={`cards-grid ${isShuffling ? 'cards-grid--shuffling' : ''}`}
+    aria-label="Tablero de juego"
+    role="grid"
+  >
+    {cards.map((card, index) => (
+      <CardComponent
+        key={card.cardId}
+        card={card}
+        onClick={onCardClick}
+        isShuffling={isShuffling}
+        shuffleIndex={index}
+      />
     ))}
   </section>
 );

@@ -52,26 +52,34 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const rawCards = createCards(response.data);
     const shuffled = shuffleCards(rawCards);
-    // Show all face-up
-    const faceUp: Card[] = shuffled.map((c) => ({ ...c, isFlipped: true }));
+    // Start with shuffling animation (cards face down)
+    const faceDown: Card[] = shuffled.map((c) => ({ ...c, isFlipped: false }));
 
     set((prev) => ({
       ...prev,
-      cards: faceUp,
+      cards: faceDown,
       isLoading: false,
-      gameStatus: 'showing',
+      gameStatus: 'shuffling',
     }));
 
-    // After preview, flip all down and enable play
-    const timeoutId = setTimeout(() => {
-      const faceDown: Card[] = get().cards.map((c) => ({
-        ...c,
-        isFlipped: false,
-      }));
-      set((prev) => ({ ...prev, cards: faceDown, gameStatus: 'playing', previewTimeoutId: null }));
-    }, GAME_CONFIG.PREVIEW_DELAY_MS);
+    // After shuffle animation, show cards face-up
+    const shuffleTimeoutId = setTimeout(() => {
+      const faceUp: Card[] = get().cards.map((c) => ({ ...c, isFlipped: true }));
+      set((prev) => ({ ...prev, cards: faceUp, gameStatus: 'showing' }));
 
-    set((prev) => ({ ...prev, previewTimeoutId: timeoutId }));
+      // After preview, flip all down and enable play
+      const previewTimeoutId = setTimeout(() => {
+        const faceDown: Card[] = get().cards.map((c) => ({
+          ...c,
+          isFlipped: false,
+        }));
+        set((prev) => ({ ...prev, cards: faceDown, gameStatus: 'playing', previewTimeoutId: null }));
+      }, GAME_CONFIG.PREVIEW_DELAY_MS);
+
+      set((prev) => ({ ...prev, previewTimeoutId }));
+    }, GAME_CONFIG.SHUFFLE_ANIMATION_MS);
+
+    set((prev) => ({ ...prev, previewTimeoutId: shuffleTimeoutId }));
   },
 
   /**
