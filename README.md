@@ -127,7 +127,7 @@ npm run dev
 pnpm dev
 ```
 
-La aplicación estará disponible en: **http://localhost:5173**
+La aplicación estará disponible en: **`http://localhost:5173`**
 
 ## 🎯 Cómo Jugar
 
@@ -177,7 +177,7 @@ La aplicación crea automáticamente las siguientes tablas:
 
 ## 📁 Estructura del Proyecto
 
-```
+```bash
 RickMortyMem/
 ├── public/                 # Archivos estáticos
 ├── src/
@@ -285,7 +285,7 @@ src/
 - `ComponentName.module.css` - Estilos con scoping automático
 - `ComponentName.test.tsx` - Tests unitarios
 
-## �📜 Scripts Disponibles
+## �� Scripts Disponibles
 
 ```bash
 # Desarrollo
