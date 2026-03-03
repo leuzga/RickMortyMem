@@ -1,7 +1,7 @@
 import React from 'react';
 import { ToastProps } from './Toast.types';
 import { TOAST_ICONS, ARIA_LABELS, TOAST_CLOSE_SYMBOL } from '../../constants/ui.constants';
-import './Toast.css';
+import styles from './Toast.module.css';
 
 export const Toast: React.FC<Omit<ToastProps, 'id'>> = ({
   message,
@@ -25,15 +25,15 @@ export const Toast: React.FC<Omit<ToastProps, 'id'>> = ({
   };
 
   return (
-    <div className={`toast toast--${type}`}>
-      <div className="toast__icon">
+    <div className={`${styles.toast} ${styles[`toast${type.charAt(0).toUpperCase() + type.slice(1)}`]}`}>
+      <div className={styles.toastIcon}>
         {getToastIcon()}
       </div>
-      <div className="toast__message">
+      <div className={styles.toastMessage}>
         {message}
       </div>
       <button
-        className="toast__close"
+        className={styles.toastClose}
         onClick={onClose}
         aria-label={ARIA_LABELS.TOAST_CLOSE}
       >

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import type { Card as CardType } from '../../types/game.types';
 import { GAME_UI } from '../../constants/game.constants';
-import './Card.css';
+import styles from './Card.module.css';
 
 interface CardProps {
   readonly card: CardType;
@@ -44,7 +44,7 @@ export const Card: React.FC<CardProps> = ({ card, onClick, isShuffling = false, 
   return (
     <div
       id={`card-${cardId}`}
-      className={`card ${isFlipped ? 'card--flipped' : ''} ${isMatched ? 'card--matched' : ''} ${isShuffling ? 'card--shuffling' : ''}`}
+      className={`${styles.card} ${isFlipped ? styles.cardFlipped : ''} ${isMatched ? styles.cardMatched : ''} ${isShuffling ? styles.cardShuffling : ''}`}
       onClick={handleClick}
       role="button"
       tabIndex={isFlipped || isMatched ? -1 : 0}
@@ -53,22 +53,22 @@ export const Card: React.FC<CardProps> = ({ card, onClick, isShuffling = false, 
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick(); }}
       style={shuffleVars}
     >
-      <div className="card__inner">
+      <div className={styles.cardInner}>
         {/* Back face */}
-        <div className="card__face card__face--back" aria-hidden="true">
-          <div className="card__back-pattern">
-            <span className="card__back-icon">🧪</span>
+        <div className={`${styles.cardFace} ${styles.cardFaceBack}`} aria-hidden="true">
+          <div className={styles.cardBackPattern}>
+            <span className={styles.cardBackIcon}>🧪</span>
           </div>
         </div>
         {/* Front face */}
-        <div className="card__face card__face--front">
+        <div className={`${styles.cardFace} ${styles.cardFaceFront}`}>
           <img
             src={image}
             alt={name}
-            className="card__image"
+            className={styles.cardImage}
             loading="lazy"
           />
-          <span className="card__name">{name}</span>
+          <span className={styles.cardName}>{name}</span>
         </div>
       </div>
     </div>

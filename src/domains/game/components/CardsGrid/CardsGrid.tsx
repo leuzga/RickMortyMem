@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Card } from '../../types/game.types';
 import { Card as CardComponent } from '../Card/Card';
-import './CardsGrid.css';
+import styles from './CardsGrid.module.css';
 
 interface CardsGridProps {
   readonly cards: Card[];
@@ -11,7 +11,7 @@ interface CardsGridProps {
 
 export const CardsGrid: React.FC<CardsGridProps> = ({ cards, onCardClick, isShuffling = false }) => (
   <section
-    className={`cards-grid ${isShuffling ? 'cards-grid--shuffling' : ''}`}
+    className={`${styles.cardsGrid} ${isShuffling ? styles.cardsGridShuffling : ''}`}
     aria-label="Tablero de juego"
     role="grid"
   >

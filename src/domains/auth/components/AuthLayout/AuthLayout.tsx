@@ -1,6 +1,6 @@
 import React from 'react';
 import { AUTH_UI } from '../../constants/auth.constants';
-import './AuthLayout.css';
+import styles from './AuthLayout.module.css';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -12,36 +12,36 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
   title = AUTH_UI.LAYOUT.DEFAULT_TITLE,
 }) => {
   return (
-    <div className="auth-layout">
+    <div className={styles.authLayout}>
       {/* Lado izquierdo - Imagen de fondo */}
-      <div className="auth-layout__left">
-        <div className="auth-layout__overlay">
-          <div className="auth-layout__content">
-            <h1 className="auth-layout__title">{AUTH_UI.LAYOUT.GAME_TITLE}</h1>
-            <p className="auth-layout__subtitle">{AUTH_UI.LAYOUT.GAME_SUBTITLE}</p>
+      <div className={styles.authLayoutLeft}>
+        <div className={styles.authLayoutOverlay}>
+          <div className={styles.authLayoutContent}>
+            <h1 className={styles.authLayoutTitle}>{AUTH_UI.LAYOUT.GAME_TITLE}</h1>
+            <p className={styles.authLayoutSubtitle}>{AUTH_UI.LAYOUT.GAME_SUBTITLE}</p>
           </div>
         </div>
       </div>
 
       {/* Lado derecho - Panel con formulario */}
-      <div className="auth-layout__right">
-        <div className="auth-layout__form-container">
+      <div className={styles.authLayoutRight}>
+        <div className={styles.authLayoutFormContainer}>
           {/* Logo en la parte superior */}
-          <header className="auth-layout__logo">
+          <header className={styles.authLayoutLogo}>
             <img
               src={AUTH_UI.LAYOUT.LOGO_PATH}
               alt={AUTH_UI.LAYOUT.LOGO_ALT}
-              className="auth-layout__logo-img"
+              className={styles.authLayoutLogoImg}
             />
           </header>
 
           {/* Título de bienvenida */}
-          <div className="auth-layout__header">
-            <h2 className="auth-layout__welcome">{title}</h2>
+          <div className={styles.authLayoutHeader}>
+            <h2 className={styles.authLayoutWelcome}>{title}</h2>
           </div>
 
           {/* Formulario */}
-          <div className="auth-layout__form">
+          <div className={styles.authLayoutForm}>
             {children}
           </div>
         </div>
