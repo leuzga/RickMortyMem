@@ -34,3 +34,8 @@ coverage/
 
 # AI assistant directories
 .gemini/
+
+# Documentation files - ignore all .md and .pdf except README.md in root
+*.md
+!README.md
+*.pdf
