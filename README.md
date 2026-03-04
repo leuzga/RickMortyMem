@@ -285,7 +285,34 @@ src/
 - `ComponentName.module.css` - Estilos con scoping automático
 - `ComponentName.test.tsx` - Tests unitarios
 
-## �� Scripts Disponibles
+## ⚡ Performance & Optimizaciones
+
+### Lazy Loading
+
+El dominio `game` se carga de forma diferida usando `React.lazy` + `Suspense`. Esto reduce el bundle inicial de la pantalla de login, cargando el código del juego **solo cuando el usuario se autentica**.
+
+```
+App.tsx
+└── <Suspense fallback={<LoadingFallback />}>
+      <GameBoard />   ← cargado on-demand
+    </Suspense>
+```
+
+### Memoización de Componentes
+
+Para evitar re-renderizaciones en cadena al voltear cartas, todos los componentes del juego están memoizados:
+
+| Componente | Técnica | Detalle |
+|---|---|---|
+| `Card` | `React.memo` + comparador | Re-renderiza solo si cambia `isFlipped`, `isMatched` o `isShuffling` |
+| `Card` | `useCallback` | `handleClick` no se recrea en cada render |
+| `CardsGrid` | `React.memo` | Shallow comparison (suficiente para sus props) |
+| `GameStats` | `React.memo` | Props primitivos — muy eficiente |
+| `VictoryModal` | `React.memo` + `useCallback` | No re-renderiza hasta que `gameStatus === 'finished'` |
+
+> **Resultado**: Al voltear una carta, solo se re-renderizan los componentes cuyas props realmente cambiaron, en lugar de todo el tablero.
+
+
 
 ```bash
 # Desarrollo

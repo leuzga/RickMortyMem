@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback, memo } from 'react';
 import type { Card as CardType } from '../../types/game.types';
 import { GAME_UI } from '../../constants/game.constants';
 import styles from './Card.module.css';
@@ -31,9 +31,9 @@ export const Card: React.FC<CardProps> = ({ card, onClick, isShuffling = false, 
     } as React.CSSProperties;
   }, [isShuffling, shuffleIndex]);
 
-  const handleClick = (): void => {
+  const handleClick = useCallback((): void => {
     if (!isFlipped && !isMatched) onClick(card);
-  };
+  }, [isFlipped, isMatched, onClick, card]);
 
   const ariaLabel = isMatched
     ? GAME_UI.CARD.ARIA_LABEL_MATCHED(name)
@@ -74,3 +74,11 @@ export const Card: React.FC<CardProps> = ({ card, onClick, isShuffling = false, 
     </div>
   );
 };
+
+const areEqual = (prev: CardProps, next: CardProps): boolean =>
+  prev.card.isFlipped === next.card.isFlipped &&
+  prev.card.isMatched === next.card.isMatched &&
+  prev.isShuffling === next.isShuffling &&
+  prev.card.cardId === next.card.cardId;
+
+export const CardMemo = memo(Card, areEqual);

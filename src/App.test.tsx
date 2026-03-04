@@ -41,7 +41,7 @@ describe('App Component', () => {
     expect(loginButton).toBeDefined();
   });
 
-  it('debe mostrar el GameBoard cuando está autenticado', () => {
+  it('debe mostrar el GameBoard cuando está autenticado', async () => {
     mockUseAuthStore.mockReturnValue({
       isAuthenticated: true,
       user: { id: '1', username: 'Rick', email: 'rick@citadel.com' },
@@ -55,8 +55,8 @@ describe('App Component', () => {
     } as any);
 
     render(<App />);
-    // GameBoard renders with its status region
-    const statusRegion = screen.getByRole('status');
+    // GameBoard es lazy — esperamos a que se resuelva el Suspense
+    const statusRegion = await screen.findByRole('status');
     expect(statusRegion).toBeDefined();
   });
 });

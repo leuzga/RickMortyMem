@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { GAME_UI } from '../../constants/game.constants';
 import styles from './GameStats.module.css';
 
@@ -8,7 +8,7 @@ interface GameStatsProps {
   readonly totalPairs: number;
 }
 
-export const GameStats: React.FC<GameStatsProps> = ({ turns, matches, totalPairs }) => (
+const GameStatsBase: React.FC<GameStatsProps> = ({ turns, matches, totalPairs }) => (
   <div className={styles.gameStats} aria-live="polite" aria-label="Estadísticas del juego">
     <div className={styles.gameStatsItem}>
       <span className={styles.gameStatsValue} id="turns-value">{turns}</span>
@@ -21,3 +21,5 @@ export const GameStats: React.FC<GameStatsProps> = ({ turns, matches, totalPairs
     </div>
   </div>
 );
+
+export const GameStats = memo(GameStatsBase);

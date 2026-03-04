@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { useAuthStore } from './domains/auth/store/useAuthStore';
 import { AuthLayout } from './domains/auth/components/AuthLayout/AuthLayout';
 import { LoginForm } from './domains/auth/components/LoginForm/LoginForm';
@@ -6,10 +6,13 @@ import { RegisterForm } from './domains/auth/components/RegisterForm/RegisterFor
 import { ForgotPasswordForm } from './domains/auth/components/ForgotPasswordForm/ForgotPasswordForm';
 import { ToastContainer } from './shared/components/Toast/ToastContainer';
 import { Header } from './shared/components/Header/Header';
-import { GameBoard } from './domains/game/components/GameBoard/GameBoard';
 import { getLayoutTitle, isOAuthCallback } from './domains/auth/utils/auth.utils';
 import type { ActiveForm } from './domains/auth/utils/auth.utils';
 import './App.css';
+
+const GameBoard = lazy(() =>
+  import('./domains/game/components/GameBoard/GameBoard').then((m) => ({ default: m.GameBoard }))
+);
 
 const App: React.FC = () => {
   const { isAuthenticated, loginWithOAuthCallback } = useAuthStore();
@@ -23,7 +26,9 @@ const App: React.FC = () => {
     <main className={`app-container ${isAuthenticated ? 'app-container--game' : ''}`}>
       <Header />
       {isAuthenticated ? (
-        <GameBoard />
+        <Suspense fallback={<div className="app-loading" aria-live="polite" aria-label="Cargando juego…" />}>
+          <GameBoard />
+        </Suspense>
       ) : (
         <AuthLayout title={getLayoutTitle(activeForm)}>
           {activeForm === 'register' && (

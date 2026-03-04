@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, memo } from 'react';
 import { useAuthStore } from '../../../../domains/auth/store/useAuthStore';
 import { GAME_UI, GAME_MESSAGES } from '../../constants/game.constants';
 import { GAME_CONFIG } from '../../constants/game.constants';
@@ -9,12 +9,12 @@ interface VictoryModalProps {
   readonly onPlayAgain: () => void;
 }
 
-export const VictoryModal: React.FC<VictoryModalProps> = ({ turns, onPlayAgain }) => {
+const VictoryModalBase: React.FC<VictoryModalProps> = ({ turns, onPlayAgain }) => {
   const { logout } = useAuthStore();
 
-  const handleHome = (): void => {
+  const handleHome = useCallback((): void => {
     void logout();
-  };
+  }, [logout]);
 
   return (
     <div className={styles.victoryModal} role="dialog" aria-modal="true" aria-labelledby="victory-title">
@@ -62,3 +62,5 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({ turns, onPlayAgain }
     </div>
   );
 };
+
+export const VictoryModal = memo(VictoryModalBase);

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { memo } from 'react';
 import type { Card } from '../../types/game.types';
-import { Card as CardComponent } from '../Card/Card';
+import { CardMemo } from '../Card/Card';
 import styles from './CardsGrid.module.css';
 
 interface CardsGridProps {
@@ -9,14 +9,14 @@ interface CardsGridProps {
   readonly isShuffling?: boolean;
 }
 
-export const CardsGrid: React.FC<CardsGridProps> = ({ cards, onCardClick, isShuffling = false }) => (
+const CardsGridBase: React.FC<CardsGridProps> = ({ cards, onCardClick, isShuffling = false }) => (
   <section
     className={`${styles.cardsGrid} ${isShuffling ? styles.cardsGridShuffling : ''}`}
     aria-label="Tablero de juego"
     role="grid"
   >
     {cards.map((card, index) => (
-      <CardComponent
+      <CardMemo
         key={card.cardId}
         card={card}
         onClick={onCardClick}
@@ -26,3 +26,5 @@ export const CardsGrid: React.FC<CardsGridProps> = ({ cards, onCardClick, isShuf
     ))}
   </section>
 );
+
+export const CardsGrid = memo(CardsGridBase);
