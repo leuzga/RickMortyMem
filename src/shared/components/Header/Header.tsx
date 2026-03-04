@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuthStore } from '../../../domains/auth/store/useAuthStore';
 import { useHeaderMenu } from './useHeaderMenu';
 import { ARIA_LABELS, HEADER_UI } from '../../constants/ui.constants';
+import avatarImg from '../../../assets/images/avatar.png';
 import styles from './Header.module.css';
 
 // ─── Guest icon (SVG, bordes blancos) ────────────────────────────────────────
@@ -54,7 +55,7 @@ export const Header: React.FC = () => {
         {isAuthenticated ? (
           <>
             <img
-              src={HEADER_UI.AVATAR_PATH}
+              src={avatarImg}
               alt={HEADER_UI.AVATAR_ALT}
               className={styles.headerAvatar}
             />
