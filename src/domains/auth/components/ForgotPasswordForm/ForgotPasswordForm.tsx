@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForgotPasswordForm } from './useForgotPasswordForm';
 import { AUTH_UI } from '../../constants/auth.constants';
-import './ForgotPasswordForm.css';
+import styles from './ForgotPasswordForm.module.css';
 
 interface ForgotPasswordFormProps {
   onLoginClick: () => void;
@@ -12,15 +12,15 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onLoginC
     useForgotPasswordForm({ onSuccess: onLoginClick });
 
   return (
-    <form className="forgot-form" onSubmit={handleSubmit} noValidate>
-      <p className="forgot-form__subtitle">{AUTH_UI.FORGOT_PASSWORD.SUBTITLE}</p>
+    <form className={styles.forgotForm} onSubmit={handleSubmit} noValidate>
+      <p className={styles.forgotFormSubtitle}>{AUTH_UI.FORGOT_PASSWORD.SUBTITLE}</p>
 
-      <div className="forgot-form__field">
-        <label className="forgot-form__label">{AUTH_UI.FORGOT_PASSWORD.EMAIL_LABEL}</label>
+      <div className={styles.forgotFormField}>
+        <label className={styles.forgotFormLabel}>{AUTH_UI.FORGOT_PASSWORD.EMAIL_LABEL}</label>
         <input
           name="email"
           type="email"
-          className="forgot-form__input"
+          className={styles.forgotFormInput}
           value={form.email}
           onChange={handleChange}
           placeholder={AUTH_UI.FORGOT_PASSWORD.EMAIL_PLACEHOLDER}
@@ -28,12 +28,12 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onLoginC
         />
       </div>
 
-      <div className="forgot-form__field">
-        <label className="forgot-form__label">{AUTH_UI.FORGOT_PASSWORD.NEW_PASSWORD_LABEL}</label>
+      <div className={styles.forgotFormField}>
+        <label className={styles.forgotFormLabel}>{AUTH_UI.FORGOT_PASSWORD.NEW_PASSWORD_LABEL}</label>
         <input
           name="newPassword"
           type="password"
-          className="forgot-form__input"
+          className={styles.forgotFormInput}
           value={form.newPassword}
           onChange={handleChange}
           placeholder={AUTH_UI.FORGOT_PASSWORD.NEW_PASSWORD_PLACEHOLDER}
@@ -42,17 +42,17 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onLoginC
       </div>
 
       {validationErrors.length > 0 && (
-        <div className="forgot-form__validation-errors">
+        <div className={styles.forgotFormValidationErrors}>
           {validationErrors.map((err, index) => (
-            <p key={index} className="forgot-form__error">{err}</p>
+            <p key={index} className={styles.forgotFormError}>{err}</p>
           ))}
         </div>
       )}
 
-      <div className="forgot-form__actions">
+      <div className={styles.forgotFormActions}>
         <button
           type="submit"
-          className="forgot-form__button--primary"
+          className={styles.forgotFormButtonPrimary}
           disabled={isLoading}
         >
           {isLoading
@@ -61,7 +61,7 @@ export const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ onLoginC
         </button>
         <button
           type="button"
-          className="forgot-form__button--secondary"
+          className={styles.forgotFormButtonSecondary}
           onClick={onLoginClick}
         >
           {AUTH_UI.FORGOT_PASSWORD.BACK_TO_LOGIN}

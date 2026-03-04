@@ -2,13 +2,13 @@ import React from 'react';
 import { useAuthStore } from '../../../domains/auth/store/useAuthStore';
 import { useHeaderMenu } from './useHeaderMenu';
 import { ARIA_LABELS, HEADER_UI } from '../../constants/ui.constants';
-import './Header.css';
+import styles from './Header.module.css';
 
 // ─── Guest icon (SVG, bordes blancos) ────────────────────────────────────────
 
 const GuestIcon: React.FC = () => (
   <svg
-    className="header__avatar--guest"
+    className={styles.headerAvatarGuest}
     viewBox="0 0 38 38"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -41,9 +41,9 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="header" role="banner">
+    <header className={styles.header} role="banner">
       <div
-        className="header__avatar-wrapper"
+        className={styles.headerAvatarWrapper}
         aria-label={ARIA_LABELS.HEADER_AVATAR}
         aria-haspopup="true"
         aria-expanded={isOpen}
@@ -56,10 +56,10 @@ export const Header: React.FC = () => {
             <img
               src={HEADER_UI.AVATAR_PATH}
               alt={HEADER_UI.AVATAR_ALT}
-              className="header__avatar"
+              className={styles.headerAvatar}
             />
             {user?.username && (
-              <span className="header__username">{user.username}</span>
+              <span className={styles.headerUsername}>{user.username}</span>
             )}
           </>
         ) : (
@@ -69,7 +69,7 @@ export const Header: React.FC = () => {
         {/* Dropdown menu */}
         {isOpen && (
           <nav
-            className="header__menu"
+            className={styles.headerMenu}
             role="menu"
             aria-label={ARIA_LABELS.HEADER_MENU}
             onMouseEnter={handleMouseEnterMenu}
@@ -77,7 +77,7 @@ export const Header: React.FC = () => {
           >
             {isAuthenticated ? (
               <button
-                className="header__menu-item header__menu-item--danger"
+                className={`${styles.headerMenuItem} ${styles.headerMenuItemDanger}`}
                 role="menuitem"
                 onClick={handleLogout}
               >
@@ -86,7 +86,7 @@ export const Header: React.FC = () => {
               </button>
             ) : (
               <button
-                className="header__menu-item"
+                className={styles.headerMenuItem}
                 role="menuitem"
                 onClick={() => { /* login redirect handled by App state */ }}
               >

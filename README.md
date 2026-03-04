@@ -127,7 +127,7 @@ npm run dev
 pnpm dev
 ```
 
-La aplicación estará disponible en: **http://localhost:5173**
+La aplicación estará disponible en: **`http://localhost:5173`**
 
 ## 🎯 Cómo Jugar
 
@@ -177,7 +177,7 @@ La aplicación crea automáticamente las siguientes tablas:
 
 ## 📁 Estructura del Proyecto
 
-```
+```bash
 RickMortyMem/
 ├── public/                 # Archivos estáticos
 ├── src/
@@ -212,7 +212,80 @@ RickMortyMem/
 └── README.md              # Este archivo
 ```
 
-## 📜 Scripts Disponibles
+## � Componentes Totales en el Proyecto Memory
+
+**Total: 26 componentes** organizados por arquitectura por dominios:
+
+### 🎮 Game Domain (5 componentes)
+```
+src/domains/game/components/
+├── Card/           # Carta individual con animaciones 3D
+├── CardsGrid/      # Grid de cartas con portal interdimensional
+├── GameBoard/      # Tablero principal del juego
+├── GameStats/      # Estadísticas (turnos, pares encontrados)
+└── VictoryModal/   # Modal de victoria con confeti
+```
+
+### 🔐 Auth Domain (5 componentes)
+```
+src/domains/auth/components/
+├── AuthLayout/     # Layout común para páginas de auth
+├── ForgotPasswordForm/ # Formulario de recuperación de contraseña
+├── LoginForm/      # Formulario de login con OAuth
+├── OAuthButtons/   # Botones de autenticación social
+└── RegisterForm/   # Formulario de registro
+```
+
+### 🎨 Shared Domain (3 componentes)
+```
+src/shared/components/
+├── Header/         # Header con avatar y menú dropdown
+├── Toast/          # Notificaciones tipo toast
+└── ToastContainer/ # Contenedor de toasts
+```
+
+### 🏠 Raíz del proyecto (13 componentes)
+```
+src/
+├── App.tsx                    # Componente principal
+├── App.test.tsx              # Tests del App
+├── ErrorBoundary.tsx         # Manejo de errores
+├── Router.tsx                # Configuración de rutas
+├── Router.test.tsx           # Tests del router
+├── pages/
+│   ├── GamePage.tsx         # Página del juego
+│   ├── HomePage.tsx         # Página de inicio
+│   ├── LoginPage.tsx        # Página de login
+│   ├── NotFoundPage.tsx     # Página 404
+│   ├── RegisterPage.tsx     # Página de registro
+│   └── ResetPasswordPage.tsx # Página de reset password
+└── 7 archivos de test adicionales
+```
+
+### 📈 Resumen por Categoría
+
+| Categoría | Cantidad | Descripción |
+|-----------|----------|-------------|
+| **Game** | 5 | Lógica del juego de memoria |
+| **Auth** | 5 | Sistema de autenticación |
+| **Shared** | 3 | Componentes reutilizables |
+| **Pages** | 6 | Páginas de la aplicación |
+| **Raíz** | 7 | Componentes principales y tests |
+| **TOTAL** | **26** | Componentes activos |
+
+### 🎯 Arquitectura DDD (Domain-Driven Design)
+
+✅ **Separación clara por dominios:**
+- `game/` - Lógica del juego de memoria
+- `auth/` - Autenticación y registro
+- `shared/` - Componentes transversales
+
+✅ **Cada componente tiene:**
+- `ComponentName.tsx` - Implementación
+- `ComponentName.module.css` - Estilos con scoping automático
+- `ComponentName.test.tsx` - Tests unitarios
+
+## �� Scripts Disponibles
 
 ```bash
 # Desarrollo

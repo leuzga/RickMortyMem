@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRegisterForm } from './useRegisterForm';
 import { AUTH_UI } from '../../constants/auth.constants';
-import './RegisterForm.css';
+import styles from './RegisterForm.module.css';
 
 interface RegisterFormProps {
   onLoginClick: () => void;
@@ -13,13 +13,13 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLoginClick }) => {
   });
 
   return (
-    <form className="register-form" onSubmit={handleSubmit} noValidate>
-      <div className="register-form__field">
-        <label className="register-form__label">{AUTH_UI.REGISTER.USERNAME_LABEL}</label>
+    <form className={styles.registerForm} onSubmit={handleSubmit} noValidate>
+      <div className={styles.registerFormField}>
+        <label className={styles.registerFormLabel}>{AUTH_UI.REGISTER.USERNAME_LABEL}</label>
         <input
           name="username"
           type="text"
-          className="register-form__input"
+          className={styles.registerFormInput}
           value={form.username}
           onChange={handleChange}
           placeholder={AUTH_UI.REGISTER.USERNAME_PLACEHOLDER}
@@ -27,12 +27,12 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLoginClick }) => {
         />
       </div>
 
-      <div className="register-form__field">
-        <label className="register-form__label">{AUTH_UI.REGISTER.EMAIL_LABEL}</label>
+      <div className={styles.registerFormField}>
+        <label className={styles.registerFormLabel}>{AUTH_UI.REGISTER.EMAIL_LABEL}</label>
         <input
           name="email"
           type="email"
-          className="register-form__input"
+          className={styles.registerFormInput}
           value={form.email}
           onChange={handleChange}
           placeholder={AUTH_UI.REGISTER.EMAIL_PLACEHOLDER}
@@ -40,12 +40,12 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLoginClick }) => {
         />
       </div>
 
-      <div className="register-form__field">
-        <label className="register-form__label">{AUTH_UI.REGISTER.PASSWORD_LABEL}</label>
+      <div className={styles.registerFormField}>
+        <label className={styles.registerFormLabel}>{AUTH_UI.REGISTER.PASSWORD_LABEL}</label>
         <input
           name="password"
           type="password"
-          className="register-form__input"
+          className={styles.registerFormInput}
           value={form.password}
           onChange={handleChange}
           placeholder={AUTH_UI.REGISTER.PASSWORD_PLACEHOLDER}
@@ -54,26 +54,26 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onLoginClick }) => {
       </div>
 
       {validationErrors.length > 0 && (
-        <div className="register-form__validation-errors">
+        <div className={styles.registerFormValidationErrors}>
           {validationErrors.map((err, index) => (
-            <p key={index} className="register-form__error">{err}</p>
+            <p key={index} className={styles.registerFormError}>{err}</p>
           ))}
         </div>
       )}
 
-      {error && <p className="register-form__error">{error}</p>}
+      {error && <p className={styles.registerFormError}>{error}</p>}
 
-      <div className="register-form__actions">
+      <div className={styles.registerFormActions}>
         <button
           type="submit"
-          className="register-form__button register-form__button--primary"
+          className={`${styles.registerFormButton} ${styles.registerFormButtonPrimary}`}
           disabled={isLoading}
         >
           {isLoading ? AUTH_UI.REGISTER.SUBMIT_LOADING : AUTH_UI.REGISTER.SUBMIT_BUTTON}
         </button>
         <button
           type="button"
-          className="register-form__button register-form__button--secondary"
+          className={`${styles.registerFormButton} ${styles.registerFormButtonSecondary}`}
           onClick={onLoginClick}
         >
           {AUTH_UI.REGISTER.LOGIN_BUTTON}

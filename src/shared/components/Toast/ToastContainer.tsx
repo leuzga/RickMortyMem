@@ -2,13 +2,13 @@ import React from 'react';
 import { Toast } from './Toast';
 import { useToastStore } from './useToastStore';
 import { ToastProps } from './Toast.types';
-import './ToastContainer.css';
+import styles from './ToastContainer.module.css';
 
 export const ToastContainer: React.FC = () => {
   const { toasts, removeToast } = useToastStore();
 
   return (
-    <div className="toast-container">
+    <div className={styles.toastContainer}>
       {toasts.map((toast: ToastProps) => (
         <Toast
           key={toast.id}

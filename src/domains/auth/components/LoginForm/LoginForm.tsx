@@ -2,7 +2,7 @@ import React from 'react';
 import { useLoginForm } from './useLoginForm';
 import { OAuthButtons } from '../OAuthButtons/OAuthButtons';
 import { AUTH_UI } from '../../constants/auth.constants';
-import './LoginForm.css';
+import styles from './LoginForm.module.css';
 
 interface LoginFormProps {
   onRegisterClick: () => void;
@@ -13,13 +13,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onRegisterClick, onForgotP
   const { form, isLoading, error, validationErrors, handleChange, handleSubmit } = useLoginForm();
 
   return (
-    <form className="login-form" onSubmit={handleSubmit} noValidate>
-      <div className="login-form__field">
-        <label className="login-form__label">{AUTH_UI.LOGIN.EMAIL_LABEL}</label>
+    <form className={styles.loginForm} onSubmit={handleSubmit} noValidate>
+      <div className={styles.loginFormField}>
+        <label className={styles.loginFormLabel}>{AUTH_UI.LOGIN.EMAIL_LABEL}</label>
         <input
           name="email"
           type="email"
-          className="login-form__input"
+          className={styles.loginFormInput}
           value={form.email}
           onChange={handleChange}
           placeholder={AUTH_UI.LOGIN.EMAIL_PLACEHOLDER}
@@ -27,12 +27,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onRegisterClick, onForgotP
         />
       </div>
 
-      <div className="login-form__field">
-        <label className="login-form__label">{AUTH_UI.LOGIN.PASSWORD_LABEL}</label>
+      <div className={styles.loginFormField}>
+        <label className={styles.loginFormLabel}>{AUTH_UI.LOGIN.PASSWORD_LABEL}</label>
         <input
           name="password"
           type="password"
-          className="login-form__input"
+          className={styles.loginFormInput}
           value={form.password}
           onChange={handleChange}
           placeholder={AUTH_UI.LOGIN.PASSWORD_PLACEHOLDER}
@@ -40,20 +40,20 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onRegisterClick, onForgotP
         />
       </div>
 
-      <div className="login-form__options">
-        <label className="login-form__checkbox">
+      <div className={styles.loginFormOptions}>
+        <label className={styles.loginFormCheckbox}>
           <input
             name="rememberMe"
             type="checkbox"
-            className="login-form__checkbox-input"
+            className={styles.loginFormCheckboxInput}
             checked={form.rememberMe || false}
             onChange={handleChange}
           />
-          <span className="login-form__checkbox-label">{AUTH_UI.LOGIN.REMEMBER_ME_LABEL}</span>
+          <span className={styles.loginFormCheckboxLabel}>{AUTH_UI.LOGIN.REMEMBER_ME_LABEL}</span>
         </label>
         <button
           type="button"
-          className="login-form__forgot"
+          className={styles.loginFormForgot}
           onClick={onForgotPasswordClick}
         >
           {AUTH_UI.LOGIN.FORGOT_PASSWORD_LINK}
@@ -61,26 +61,26 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onRegisterClick, onForgotP
       </div>
 
       {validationErrors.length > 0 && (
-        <div className="login-form__validation-errors">
+        <div className={styles.loginFormValidationErrors}>
           {validationErrors.map((err, index) => (
-            <p key={index} className="login-form__error">{err}</p>
+            <p key={index} className={styles.loginFormError}>{err}</p>
           ))}
         </div>
       )}
 
-      {error && <p className="login-form__error">{error}</p>}
+      {error && <p className={styles.loginFormError}>{error}</p>}
 
-      <div className="login-form__actions">
+      <div className={styles.loginFormActions}>
         <button
           type="submit"
-          className="login-form__button login-form__button--primary"
+          className={`${styles.loginFormButton} ${styles.loginFormButtonPrimary}`}
           disabled={isLoading}
         >
           {isLoading ? AUTH_UI.LOGIN.SUBMIT_LOADING : AUTH_UI.LOGIN.SUBMIT_BUTTON}
         </button>
         <button
           type="button"
-          className="login-form__button login-form__button--secondary"
+          className={`${styles.loginFormButton} ${styles.loginFormButtonSecondary}`}
           onClick={onRegisterClick}
         >
           {AUTH_UI.LOGIN.REGISTER_BUTTON}
