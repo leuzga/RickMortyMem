@@ -16,6 +16,12 @@ const PROVIDER_REDIRECT: Readonly<Record<OAuthProvider, string>> = Object.freeze
   github: `${window.location.origin}/`,
 });
 
+/** Fuerza el selector de cuenta en cada inicio de sesión. */
+const PROVIDER_PROMPT: Readonly<Record<OAuthProvider, string>> = Object.freeze({
+  google: 'select_account',
+  github: 'login',
+});
+
 // ─── Impure: Supabase calls ───────────────────────────────────────────────────
 
 /**
@@ -25,7 +31,10 @@ const PROVIDER_REDIRECT: Readonly<Record<OAuthProvider, string>> = Object.freeze
 export const signInWithOAuth = async (provider: OAuthProvider): Promise<OAuthResult<void>> => {
   const { error } = await supabase.auth.signInWithOAuth({
     provider,
-    options: { redirectTo: PROVIDER_REDIRECT[provider] },
+    options: {
+      redirectTo: PROVIDER_REDIRECT[provider],
+      queryParams: { prompt: PROVIDER_PROMPT[provider] },
+    },
   });
 
   return error
