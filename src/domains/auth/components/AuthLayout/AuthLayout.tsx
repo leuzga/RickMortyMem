@@ -1,5 +1,6 @@
 import React from 'react';
 import { AUTH_UI } from '../../constants/auth.constants';
+import logoImg from '../../../../assets/images/RMlogo.png';
 import styles from './AuthLayout.module.css';
 
 interface AuthLayoutProps {
@@ -29,7 +30,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
           {/* Logo en la parte superior */}
           <header className={styles.authLayoutLogo}>
             <img
-              src={AUTH_UI.LAYOUT.LOGO_PATH}
+              src={logoImg}
               alt={AUTH_UI.LAYOUT.LOGO_ALT}
               className={styles.authLayoutLogoImg}
             />
